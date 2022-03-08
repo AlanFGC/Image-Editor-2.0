@@ -4,11 +4,14 @@ public class Driver {
 
   public static void main(String[] args) {
     
-    String filename = "manhattan-small";
+    String filename = "res/manhattan-small";
     
     ImageModel model = new ConcreteImageModel();
     
     model.loadImage(filename + ".png");
+    model.applySepia();
+    model.saveImage(filename + "-nothing.png");
+    /**
     model.applyBlur();
     model.saveImage(filename + "-blurred.png");
     model.applyBlur();
@@ -47,6 +50,7 @@ public class Driver {
     model.loadImage(filename);
     model.applyMosaic(1000);
     model.saveImage("manhattan-small-mosaic-1000.png");
+     */
 
   }
 }
