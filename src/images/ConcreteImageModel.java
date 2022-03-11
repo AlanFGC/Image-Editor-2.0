@@ -55,22 +55,23 @@ public class ConcreteImageModel implements ImageModel {
     //Matrix
     double[][] blur;
     blur = new double[3][3];
-    blur[0][0] = 1/16;
-    blur[0][1] = 1/8;
-    blur[0][2] = 1/16;
+    blur[0][0] = 0.0625;
+    System.out.println(blur[0][0]);
+    blur[0][1] = 0.125;
+    blur[0][2] = 0.0625;
 
-    blur[1][0] = 1/8;
-    blur[1][1] = 1/4;
-    blur[1][2] = 1/8;
+    blur[1][0] = 0.125;
+    blur[1][1] = 0.25;
+    blur[1][2] = 0.125;
 
-    blur[2][0] = 1/16;
-    blur[2][1] = 1/8;
-    blur[2][2] = 1/16;
+    blur[2][0] = 0.0625;
+    blur[2][1] = 0.125;
+    blur[2][2] = 0.0625;
 
     //iterate through every pixel
     int[] rgb;
-    for(int row = 0; row < this.height; row++){
-      for (int col = 0; col < this.width; col++){
+    for (int col = 0; col < this.width; col++) {
+      for (int row = 0; row < this.height; row++) {
         rgb = kernelToPixel(blur, col, row);
         newImage[col][row][0] = rgb[0];
         newImage[col][row][1] = rgb[1];
@@ -88,28 +89,29 @@ public class ConcreteImageModel implements ImageModel {
   /**
    * This is a helper function that applies a 2D matrix into
    * every rgb channel of a pixel.
+   *
    * @param kernel 2d matrix of any size as long as all columns have the same
    *               length.
-   * @param coorY is the column of the current pixel
-   * @param coorX is the row of the current pixel.
+   * @param coorY  is the row of the current pixel
+   * @param coorX  is the column of the current pixel.
    * @throws IllegalArgumentException if the col or row are out of bounds.
    */
   private int[] kernelToPixel(double[][] kernel, int coorY, int coorX) throws
-          IllegalArgumentException{
+          IllegalArgumentException {
     System.out.println(String.format("Current PIXEL : (%dx, %dy)", coorX, coorY));
 
     //check out of bounds
-    if (coorX < 0 || coorY < 0 || coorX > this.height || coorY > this.width){
+    if (coorX < 0 || coorY < 0 || coorX > this.height || coorY > this.width) {
       throw new IllegalArgumentException("Column or Row out of bounds");
     }
 
     // kernel center
     int centerY;
-    centerY = kernel.length/2;
+    centerY = kernel.length / 2;
     int centerX;
-    centerX = kernel[0].length/2;
+    centerX = kernel[0].length / 2;
 
-    if (centerX != centerY){
+    if (centerX != centerY) {
       System.out.println(String.format("Kernel center: %d, %d\n", centerX, centerY));
       throw new IllegalArgumentException("Kernel dimensions are incorrect");
     }
@@ -122,32 +124,49 @@ public class ConcreteImageModel implements ImageModel {
     rgb[1] = 0;
     rgb[2] = 0;
 
+    // current image location
     int offsetY;
     offsetY = coorY - centerY;
     int offsetX;
     offsetX = coorX - centerX;
+
+
+    // System.out.println(String.format("OFFSET %dx, %dy ", offsetX, offsetY));
+
     //sum
     int rowLen;
     rowLen = kernel.length;
     int colLen;
 
-    for (int row = 0; row < rowLen; row++){
-      colLen = kernel[row].length;
-      for (int col = 0; col < colLen; col++){
-        int currentX;
-        currentX = offsetX + col;
+    double sumR;
+    sumR = 0;
+    double sumG;
+    sumG = 0;
+    double sumB;
+    sumB = 0;
 
-        int currentY;
+    //offset
+    int currentX;
+    int currentY;
+
+    for (int row = 0; row < kernel.length; row++) {
+      for (int col = 0; col < kernel[row].length; col++) {
+        currentX = offsetX + col;
         currentY = offsetY + row;
-        if (currentY > this.height || currentX > this.width || currentX < 0 || currentY < 0){
+        if (currentY >= this.height || currentX >= this.width || currentX < 0 || currentY < 0) {
           continue;
         } else {
-          rgb[0] = 255;
-          rgb[1] = 255;
-          rgb[2] = 255;
+          sumR += image[currentY][currentX][0] * kernel[col][row];
+          sumG += image[currentY][currentX][1] * kernel[col][row];
+          sumB += image[currentY][currentX][2] * kernel[col][row];
         }
       }
     }
+
+    rgb[0] = (int) sumR;
+    rgb[1] = (int) sumG;
+    rgb[2] = (int) sumB;
+    // System.out.println(String.format("RGB: %d, %d, %d", rgb[0], rgb[1], rgb[2]));
     return rgb;
   }
 
@@ -160,7 +179,7 @@ public class ConcreteImageModel implements ImageModel {
     for (int i = 0; i < this.width; i++) {
       for (int j = 0; j < this.height; j++) {
         pixelValue = (int) ((image[j][i][0] * r) +
-                        (image[j][i][1] * g) + (image[j][i][2] * b));
+                (image[j][i][1] * g) + (image[j][i][2] * b));
         if (pixelValue < 0) {
           pixelValue = 0;
         }
@@ -200,7 +219,7 @@ public class ConcreteImageModel implements ImageModel {
         int blue = image[j][i][1];
         int green = image[j][i][1];
         //red channel
-        pixelValR = (int) (( red * rgb[0][0]) + (green * rgb[0][1])
+        pixelValR = (int) ((red * rgb[0][0]) + (green * rgb[0][1])
                 + (blue * rgb[0][2]));
         if (pixelValR < 0) {
           pixelValR = 0;
@@ -211,7 +230,7 @@ public class ConcreteImageModel implements ImageModel {
         image[j][i][0] = pixelValR;
 
         //green channel
-        pixelValG = (int) ((red  * rgb[1][0]) + (green * rgb[1][1])
+        pixelValG = (int) ((red * rgb[1][0]) + (green * rgb[1][1])
                 + (blue * rgb[1][2]));
         if (pixelValG < 0) {
           pixelValG = 0;
