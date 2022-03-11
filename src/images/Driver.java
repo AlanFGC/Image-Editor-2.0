@@ -4,13 +4,13 @@ public class Driver {
 
   public static void main(String[] args) {
     
-    String filename = "res/manhattan-small";
+    String filename = "res/squirrel";
     
     ImageModel model = new ConcreteImageModel();
     
-    model.loadImage(filename + ".png");
-    model.applySepia();
-    model.saveImage(filename + "-nothing.png");
+    model.loadImage(filename + ".jpg");
+    model.applyBlur();
+    model.saveImage(filename + "-nothing.jpg");
     /**
     model.applyBlur();
     model.saveImage(filename + "-blurred.png");

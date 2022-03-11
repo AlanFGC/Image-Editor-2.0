@@ -49,12 +49,106 @@ public class ConcreteImageModel implements ImageModel {
 
   @Override
   public void applyBlur() {
+    //New image
+    int[][][] newImage;
+    newImage = new int[this.width][this.height][3];
+    //Matrix
+    double[][] blur;
+    blur = new double[3][3];
+    blur[0][0] = 1/16;
+    blur[0][1] = 1/8;
+    blur[0][2] = 1/16;
 
+    blur[1][0] = 1/8;
+    blur[1][1] = 1/4;
+    blur[1][2] = 1/8;
+
+    blur[2][0] = 1/16;
+    blur[2][1] = 1/8;
+    blur[2][2] = 1/16;
+
+    //iterate through every pixel
+    int[] rgb;
+    for(int row = 0; row < this.height; row++){
+      for (int col = 0; col < this.width; col++){
+        rgb = kernelToPixel(blur, col, row);
+        newImage[col][row][0] = rgb[0];
+        newImage[col][row][1] = rgb[1];
+        newImage[col][row][2] = rgb[2];
+      }
+    }
+    this.image = newImage;
   }
 
   @Override
   public void applySharpen() {
 
+  }
+
+  /**
+   * This is a helper function that applies a 2D matrix into
+   * every rgb channel of a pixel.
+   * @param kernel 2d matrix of any size as long as all columns have the same
+   *               length.
+   * @param coorY is the column of the current pixel
+   * @param coorX is the row of the current pixel.
+   * @throws IllegalArgumentException if the col or row are out of bounds.
+   */
+  private int[] kernelToPixel(double[][] kernel, int coorY, int coorX) throws
+          IllegalArgumentException{
+    System.out.println(String.format("Current PIXEL : (%dx, %dy)", coorX, coorY));
+
+    //check out of bounds
+    if (coorX < 0 || coorY < 0 || coorX > this.height || coorY > this.width){
+      throw new IllegalArgumentException("Column or Row out of bounds");
+    }
+
+    // kernel center
+    int centerY;
+    centerY = kernel.length/2;
+    int centerX;
+    centerX = kernel[0].length/2;
+
+    if (centerX != centerY){
+      System.out.println(String.format("Kernel center: %d, %d\n", centerX, centerY));
+      throw new IllegalArgumentException("Kernel dimensions are incorrect");
+    }
+
+
+    //results
+    int[] rgb;
+    rgb = new int[3];
+    rgb[0] = 0;
+    rgb[1] = 0;
+    rgb[2] = 0;
+
+    int offsetY;
+    offsetY = coorY - centerY;
+    int offsetX;
+    offsetX = coorX - centerX;
+    //sum
+    int rowLen;
+    rowLen = kernel.length;
+    int colLen;
+
+    for (int row = 0; row < rowLen; row++){
+      colLen = kernel[row].length;
+      for (int col = 0; col < colLen; col++){
+        int currentX;
+        currentX = offsetX + col;
+
+        int currentY;
+        currentY = offsetY + row;
+        if (currentY > this.height || currentX > this.width || currentX < 0 || currentY < 0){
+          continue;
+        } else {
+          rgb[0] = 255;
+          rgb[1] = 255;
+          rgb[2] = 255;
+        }
+      }
+    }
+    return rgb;
   }
 
   @Override
@@ -102,9 +196,12 @@ public class ConcreteImageModel implements ImageModel {
         int pixelValG;
         int pixelValB;
 
+        int red = image[j][i][0];
+        int blue = image[j][i][1];
+        int green = image[j][i][1];
         //red channel
-        pixelValR = (int) ((image[j][i][0] * rgb[0][1]) + (image[j][i][1] * rgb[0][2])
-                + (image[j][i][2] * rgb[0][2]));
+        pixelValR = (int) (( red * rgb[0][0]) + (green * rgb[0][1])
+                + (blue * rgb[0][2]));
         if (pixelValR < 0) {
           pixelValR = 0;
         }
@@ -114,8 +211,8 @@ public class ConcreteImageModel implements ImageModel {
         image[j][i][0] = pixelValR;
 
         //green channel
-        pixelValG = (int) ((image[j][i][0] * rgb[1][1]) + (image[j][i][1] * rgb[1][2])
-                + (image[j][i][2] * rgb[1][2]));
+        pixelValG = (int) ((red  * rgb[1][0]) + (green * rgb[1][1])
+                + (blue * rgb[1][2]));
         if (pixelValG < 0) {
           pixelValG = 0;
         }
@@ -125,8 +222,8 @@ public class ConcreteImageModel implements ImageModel {
         image[j][i][1] = pixelValG;
 
         //blue channel
-        pixelValB = (int) ((image[j][i][0] * rgb[2][1]) + (image[j][i][1] * rgb[2][2])
-                + (image[j][i][2] * rgb[2][2]));
+        pixelValB = (int) ((red * rgb[2][0]) + (green * rgb[2][1])
+                + (blue * rgb[2][2]));
         if (pixelValB < 0) {
           pixelValB = 0;
         }
