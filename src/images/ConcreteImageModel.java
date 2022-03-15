@@ -17,6 +17,8 @@ public class ConcreteImageModel implements ImageModel {
   //Constructors
   public ConcreteImageModel() {
     image = new int[0][0][0];
+    width = 0;
+    height = 0;
   }
 
 
@@ -25,7 +27,6 @@ public class ConcreteImageModel implements ImageModel {
     try {
       this.width = getWidth(filename);
       this.height = getHeight(filename);
-      image = new int[this.width][this.height][3];
       image = readImage(filename);
     } catch (IllegalArgumentException e) {
       System.out.println(e);
@@ -51,7 +52,7 @@ public class ConcreteImageModel implements ImageModel {
   public void applyBlur() {
     //New image
     int[][][] newImage;
-    newImage = new int[this.width][this.height][3];
+    newImage = new int[this.height][this.width][3];
     //Matrix
     double[][] blur;
     blur = new double[3][3];
@@ -70,12 +71,12 @@ public class ConcreteImageModel implements ImageModel {
 
     //iterate through every pixel
     int[] rgb;
-    for (int col = 0; col < this.width; col++) {
-      for (int row = 0; row < this.height; row++) {
-        rgb = kernelToPixel(blur, col, row);
-        newImage[col][row][0] = rgb[0];
-        newImage[col][row][1] = rgb[1];
-        newImage[col][row][2] = rgb[2];
+    for (int row = 0; row < this.height; row++) {
+      for (int col = 0; col < this.width; col++) {
+        rgb = kernelToPixel(blur, row, col);
+        newImage[row][col][0] = rgb[0];
+        newImage[row][col][1] = rgb[1];
+        newImage[row][col][2] = rgb[2];
       }
     }
     this.image = newImage;
@@ -83,7 +84,55 @@ public class ConcreteImageModel implements ImageModel {
 
   @Override
   public void applySharpen() {
+    //New image
+    int[][][] newImage;
+    newImage = new int[this.height][this.width][3];
+    //Matrix
+    double[][] sharpen;
+    double oneEight = -0.125;
+    double oneFour = 0.25;
+    sharpen = new double[5][5];
 
+    sharpen[0][0] = oneEight;
+    sharpen[0][1] = oneEight;
+    sharpen[0][2] = oneEight;
+    sharpen[0][3] = oneEight;
+    sharpen[0][4] = oneEight;
+
+    sharpen[1][0] = oneEight;
+    sharpen[1][1] = oneFour;
+    sharpen[1][2] = oneFour;
+    sharpen[1][3] = oneFour;
+    sharpen[1][4] = oneEight;
+
+    sharpen[2][0] = oneEight;
+    sharpen[2][1] = oneFour;
+    sharpen[2][2] = 1.0;
+    sharpen[2][3] = oneFour;
+    sharpen[2][4] = oneEight;
+
+    sharpen[3][0] = oneEight;
+    sharpen[3][1] = oneFour;
+    sharpen[3][2] = oneFour;
+    sharpen[3][3] = oneFour;
+    sharpen[3][4] = oneEight;
+
+    sharpen[4][0] = oneEight;
+    sharpen[4][1] = oneEight;
+    sharpen[4][2] = oneEight;
+    sharpen[4][3] = oneEight;
+    sharpen[4][4] = oneEight;
+
+    int[] rgb;
+    for (int row = 0; row < this.height; row++) {
+      for (int col = 0; col < this.width; col++) {
+        rgb = kernelToPixel(sharpen, row, col);
+        newImage[row][col][0] = rgb[0];
+        newImage[row][col][1] = rgb[1];
+        newImage[row][col][2] = rgb[2];
+      }
+    }
+    this.image = newImage;
   }
 
   /**
@@ -98,10 +147,10 @@ public class ConcreteImageModel implements ImageModel {
    */
   private int[] kernelToPixel(double[][] kernel, int coorY, int coorX) throws
           IllegalArgumentException {
-    System.out.println(String.format("Current PIXEL : (%dx, %dy)", coorX, coorY));
+    System.out.println(String.format("Current PIXEL : (%dy, %dx)", coorY, coorX));
 
     //check out of bounds
-    if (coorX < 0 || coorY < 0 || coorX > this.height || coorY > this.width) {
+    if (coorX < 0 || coorY < 0 || coorY > this.height || coorX > this.width) {
       throw new IllegalArgumentException("Column or Row out of bounds");
     }
 
@@ -162,6 +211,15 @@ public class ConcreteImageModel implements ImageModel {
         }
       }
     }
+
+    sumR = sumR > 255 ? sumR = 255 : sumR;
+    sumG = sumG > 255 ? sumG = 255 : sumG;
+    sumB = sumB > 255 ? sumB = 255 : sumB;
+
+    sumR = sumR < 0 ? sumR = 0 : sumR;
+    sumG = sumG < 0 ? sumG = 0 : sumG;
+    sumB = sumB < 0 ? sumB = 0 : sumB;
+
 
     rgb[0] = (int) sumR;
     rgb[1] = (int) sumG;
