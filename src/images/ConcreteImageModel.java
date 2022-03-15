@@ -315,7 +315,8 @@ public class ConcreteImageModel implements ImageModel {
 
   @Override
   public void applyDither() {
-
+    String test;
+    test = "WTF IS THIS";
   }
 
   @Override
