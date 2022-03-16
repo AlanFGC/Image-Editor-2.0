@@ -315,9 +315,55 @@ public class ConcreteImageModel implements ImageModel {
 
   @Override
   public void applyDither() {
-    String test;
-    test = "WTF IS THIS";
+    this.applyGrayscale();
+    //apply dither
+    for (int row = 0; row < this.height; row++) {
+      for (int col = 0; col < this.width; col++) {
+        // main algorithm
+        int old_color;
+        old_color = this.image[row][col][0];
+        int newColor;
+        if (old_color < 127){
+          newColor = 0;
+        }else{
+          newColor = 255;
+        }
+        int error;
+        error = old_color - newColor;
+        this.image[row][col][0] = newColor;
+        this.image[row][col][1] = newColor;
+        this.image[row][col][2] = newColor;
+        addColor(row, col+1, error *  0.4375);
+        addColor(row+1, col-1, error *  0.1875);
+        addColor(row+1, col, error *  0.3125);
+        addColor(row+1, col+1, error *  0.0625);
+      }
+    }
   }
+
+  private void addColor(int row, int col, double value){
+    if (col < 0 || row < 0 || row >= this.height || col >= this.width) {
+      return;
+    }
+    //add value to all colors
+    image[row][col][0] += (int)value;
+    image[row][col][1] += (int)value;
+    image[row][col][2] += (int)value;
+  }
+/*
+Dither algorithm
+ for each position (r,c) in image (traversing row-wise) :
+   old_color = red-component of pixel (r,c) //or green, or blue
+   new_color = 0 or 255, whichever is closer to old_color
+   error = old_color - new_color
+   set color of pixel(r,c) to (new_color,new_color,new_color)
+
+   add (7/16 * error) to pixel on the right (r,c+1)
+   add (3/16 * error) to pixel on the next-row-left (r+1,c-1)
+   add (5/16 * error) to pixel below in next row (r+1,c)
+   add (1/16 * error) to pixel on the next-row-right (r+1,c+1)
+ */
+
 
   @Override
   public void applyMosaic(int seeds) throws IllegalArgumentException {

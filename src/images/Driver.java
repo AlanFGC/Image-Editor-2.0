@@ -9,7 +9,7 @@ public class Driver {
     ImageModel model = new ConcreteImageModel();
     
     model.loadImage(filename + ".jpg");
-    model.applySharpen();
+    model.applyDither();
     model.saveImage(filename + "-nothing.jpg");
     /**
     model.applyBlur();
