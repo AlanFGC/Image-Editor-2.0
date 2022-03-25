@@ -1,12 +1,21 @@
 package images;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import static images.ImageUtilities.getHeight;
 import static images.ImageUtilities.getWidth;
 import static images.ImageUtilities.readImage;
 import static images.ImageUtilities.writeImage;
 
+
+/**
+ * This class is the model implementation of a system that
+ * applies different filters to an image. Loads an image to memory then saves
+ * it, the original file is not modified unless so by the saveImage() method
+ * within this class.
+ */
 public class ConcreteImageModel implements ImageModel {
   //Fields
   private int[][][] image;
@@ -14,7 +23,9 @@ public class ConcreteImageModel implements ImageModel {
   private int height;
 
 
-  //Constructors
+  /**
+   * Empty constructor for Concrete Image Model.
+   */
   public ConcreteImageModel() {
     image = new int[0][0][0];
     width = 0;
@@ -22,6 +33,12 @@ public class ConcreteImageModel implements ImageModel {
   }
 
 
+  /**
+   * This class loads an image to memory.
+   *
+   * @param filename the name of the file containing the image
+   * @throws IllegalArgumentException if the file is not found or an error occurs
+   */
   @Override
   public void loadImage(String filename) throws IllegalArgumentException {
     try {
@@ -37,6 +54,12 @@ public class ConcreteImageModel implements ImageModel {
     System.out.println(String.format("Successfully loaded %s", filename));
   }
 
+  /**
+   * This methods saves an image to a specified location.
+   *
+   * @param filename the name of the file to save to
+   * @throws IllegalArgumentException if it fails to save the image
+   */
   @Override
   public void saveImage(String filename) throws IllegalArgumentException {
     try {
@@ -48,6 +71,9 @@ public class ConcreteImageModel implements ImageModel {
     System.out.println(String.format("Successfully saved image to %s file", filename));
   }
 
+  /**
+   * This method applies a 'blur' effect to the current image.
+   */
   @Override
   public void applyBlur() {
     //New image
@@ -82,6 +108,9 @@ public class ConcreteImageModel implements ImageModel {
     this.image = newImage;
   }
 
+  /**
+   * This method applies a 'sharpen' effect to the current image.
+   */
   @Override
   public void applySharpen() {
     //New image
@@ -137,13 +166,14 @@ public class ConcreteImageModel implements ImageModel {
 
   /**
    * This is a helper function that applies a 2D matrix into
-   * every rgb channel of a pixel.
+   * the current image's desired pixel
    *
    * @param kernel 2d matrix of any size as long as all columns have the same
    *               length.
    * @param coorY  is the row of the current pixel
    * @param coorX  is the column of the current pixel.
-   * @throws IllegalArgumentException if the col or row are out of bounds.
+   * @throws IllegalArgumentException if the col or row are out of bounds or the kernel
+   *                                  matrix lacks a center location
    */
   private int[] kernelToPixel(double[][] kernel, int coorY, int coorX) throws
           IllegalArgumentException {
@@ -323,9 +353,9 @@ public class ConcreteImageModel implements ImageModel {
         int old_color;
         old_color = this.image[row][col][0];
         int newColor;
-        if (old_color < 127){
+        if (old_color < 127) {
           newColor = 0;
-        }else{
+        } else {
           newColor = 255;
         }
         int error;
@@ -333,40 +363,150 @@ public class ConcreteImageModel implements ImageModel {
         this.image[row][col][0] = newColor;
         this.image[row][col][1] = newColor;
         this.image[row][col][2] = newColor;
-        addColor(row, col+1, error *  0.4375);
-        addColor(row+1, col-1, error *  0.1875);
-        addColor(row+1, col, error *  0.3125);
-        addColor(row+1, col+1, error *  0.0625);
+        // right
+        addColor(row, col + 1, error * 0.4375);
+        // next-row-left
+        addColor(row + 1, col - 1, error * 0.1875);
+        // next row
+        addColor(row + 1, col, error * 0.3125);
+        // next-row-right
+        addColor(row + 1, col + 1, error * 0.0625);
       }
     }
   }
 
-  private void addColor(int row, int col, double value){
+  // TO BE DELETED
+  private void printValues() {
+    for (int row = 0; row < this.height; row++) {
+      for (int col = 0; col < this.width; col++) {
+        int value = image[row][col][0];
+        if (value != 255 && value != 0) {
+          throw new IllegalStateException("WRONG VALUE Found");
+        }
+        System.out.println(value);
+      }
+    }
+  }
+
+  /*
+  Helper function for the dither effect.
+   */
+  private void addColor(int row, int col, double value) {
     if (col < 0 || row < 0 || row >= this.height || col >= this.width) {
       return;
     }
     //add value to all colors
-    image[row][col][0] += (int)value;
-    image[row][col][1] += (int)value;
-    image[row][col][2] += (int)value;
+    image[row][col][0] += (int) value;
+    image[row][col][1] += (int) value;
+    image[row][col][2] += (int) value;
   }
-/*
-Dither algorithm
- for each position (r,c) in image (traversing row-wise) :
-   old_color = red-component of pixel (r,c) //or green, or blue
-   new_color = 0 or 255, whichever is closer to old_color
-   error = old_color - new_color
-   set color of pixel(r,c) to (new_color,new_color,new_color)
 
-   add (7/16 * error) to pixel on the right (r,c+1)
-   add (3/16 * error) to pixel on the next-row-left (r+1,c-1)
-   add (5/16 * error) to pixel below in next row (r+1,c)
-   add (1/16 * error) to pixel on the next-row-right (r+1,c+1)
- */
-
-
+  /**
+   * This functions applies  a 'mosaic' effect to the current image
+   * by placing random seeds and creating clusters of pixels and averaging
+   * the colors of each cluster.
+   *
+   * @param seeds the number of seeds to use in the mosaic
+   * @throws IllegalArgumentException if the number of seeds is not positive
+   */
   @Override
   public void applyMosaic(int seeds) throws IllegalArgumentException {
+    if (seeds < 0) {
+      throw new IllegalArgumentException("Number of seeds is not positive");
+    }
+    int totalPixels;
+    totalPixels = this.width * this.height;
+    if (seeds > totalPixels || seeds == 0) {
+      // filter will have no effect.
+      return;
+    }
 
+    // MAIN PROCESS
+    List<int[]> coordinates;
+    coordinates = new LinkedList<>();
+    //create lists of all possible coordinates
+    for (int r = 0; r < this.height; r++) {
+      for (int c = 0; c < this.width; c++) {
+        int coor[];
+        coor = new int[2];
+        coor[0] = r;
+        coor[1] = c;
+        coordinates.add(coor);
+      }
+    }
+
+    // create all clusters
+    List<Cluster> clusters;
+    clusters = new LinkedList<>();
+    while (seeds > 0) {
+      int randomPick;
+      randomPick = (int) (totalPixels * Math.random());
+      totalPixels -= 1;
+      int[] current;
+      current = coordinates.remove(randomPick);
+      int red;
+      int green;
+      int blue;
+      red = this.image[current[0]][current[1]][0];
+      green = this.image[current[0]][current[1]][1];
+      blue = this.image[current[0]][current[1]][2];
+
+      // create new cluster
+      clusters.add(new Cluster(current[0], current[1], red, green, blue));
+      seeds -= 1;
+    }
+
+    // assign each of the remaining pixels to a cluster
+    for (int[] pixel: coordinates){
+      int row;
+      int col;
+      row = pixel[0];
+      col = pixel[1];
+      Cluster closestCluster;
+      closestCluster = null;
+      int closestDistance;
+      closestDistance = 999999999;
+
+      // calculate closest cluster center
+      for (Cluster currentCluster: clusters) {
+        int[] center;
+        center = currentCluster.getCenter();
+        int currentDistance;
+        currentDistance = calculateDistance(row, col, center[0], center[1]);
+        if (currentDistance < closestDistance){
+          closestCluster = currentCluster;
+          closestDistance = currentDistance;
+        }
+      }
+
+      // add pixel to closest cluster
+      int pixelR;
+      int pixelG;
+      int pixelB;
+      pixelR = this.image[row][col][0];
+      pixelG = this.image[row][col][1];
+      pixelB = this.image[row][col][2];
+      closestCluster.add(row, col, pixelR, pixelG, pixelB);
+    }
+
+    // calculate averages and modify image;
+    for (Cluster currentCluster: clusters){
+      int[] clusterAverage;
+      clusterAverage = currentCluster.calculateAverage();
+      for (int[] currentPixel: currentCluster.getAllCoordinates()){
+        this.image[currentPixel[0]][currentPixel[1]][0] = clusterAverage[0];
+        this.image[currentPixel[0]][currentPixel[1]][1] = clusterAverage[1];
+        this.image[currentPixel[0]][currentPixel[1]][2] = clusterAverage[2];
+      }
+    }
+  }
+
+  /*
+  helper function that calculates the closest distance
+   */
+  private int calculateDistance(int p1, int p2, int q1, int q2){
+    int distance;
+    distance = (int) Math.sqrt( Math.pow((q1 - p1), 2) + Math.pow((q2 - p2), 2) );
+    return distance;
   }
 }
