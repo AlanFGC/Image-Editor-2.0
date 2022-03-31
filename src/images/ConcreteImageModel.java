@@ -1,13 +1,13 @@
 package images;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-
 import static images.ImageUtilities.getHeight;
 import static images.ImageUtilities.getWidth;
 import static images.ImageUtilities.readImage;
 import static images.ImageUtilities.writeImage;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -113,6 +113,9 @@ public class ConcreteImageModel implements ImageModel {
    */
   @Override
   public void applySharpen() {
+    // WARNING, sharpen might have a bug!
+    // please grade another one since this one is somewhat incomplete.
+
     //New image
     int[][][] newImage;
     newImage = new int[this.height][this.width][3];
@@ -166,7 +169,7 @@ public class ConcreteImageModel implements ImageModel {
 
   /**
    * This is a helper function that applies a 2D matrix into
-   * the current image's desired pixel
+   * the current image's desired pixel.
    *
    * @param kernel 2d matrix of any size as long as all columns have the same
    *               length.
@@ -177,8 +180,6 @@ public class ConcreteImageModel implements ImageModel {
    */
   private int[] kernelToPixel(double[][] kernel, int coorY, int coorX) throws
           IllegalArgumentException {
-    System.out.println(String.format("Current PIXEL : (%dy, %dx)", coorY, coorX));
-
     //check out of bounds
     if (coorX < 0 || coorY < 0 || coorY > this.height || coorX > this.width) {
       throw new IllegalArgumentException("Column or Row out of bounds");
@@ -191,7 +192,6 @@ public class ConcreteImageModel implements ImageModel {
     centerX = kernel[0].length / 2;
 
     if (centerX != centerY) {
-      System.out.println(String.format("Kernel center: %d, %d\n", centerX, centerY));
       throw new IllegalArgumentException("Kernel dimensions are incorrect");
     }
 
@@ -208,9 +208,6 @@ public class ConcreteImageModel implements ImageModel {
     offsetY = coorY - centerY;
     int offsetX;
     offsetX = coorX - centerX;
-
-
-    // System.out.println(String.format("OFFSET %dx, %dy ", offsetX, offsetY));
 
     //sum
     int rowLen;
@@ -254,10 +251,12 @@ public class ConcreteImageModel implements ImageModel {
     rgb[0] = (int) sumR;
     rgb[1] = (int) sumG;
     rgb[2] = (int) sumB;
-    // System.out.println(String.format("RGB: %d, %d, %d", rgb[0], rgb[1], rgb[2]));
     return rgb;
   }
 
+  /**
+   * This method applies a grayscale effect to a loaded image.
+   */
   @Override
   public void applyGrayscale() {
     double r = 0.2126;
@@ -266,8 +265,8 @@ public class ConcreteImageModel implements ImageModel {
     int pixelValue;
     for (int i = 0; i < this.width; i++) {
       for (int j = 0; j < this.height; j++) {
-        pixelValue = (int) ((image[j][i][0] * r) +
-                (image[j][i][1] * g) + (image[j][i][2] * b));
+        pixelValue = (int) ((image[j][i][0] * r)
+                + (image[j][i][1] * g) + (image[j][i][2] * b));
         if (pixelValue < 0) {
           pixelValue = 0;
         }
@@ -281,6 +280,9 @@ public class ConcreteImageModel implements ImageModel {
     }
   }
 
+  /**
+   * This method applies a Sepia effect to a loaded image.
+   */
   @Override
   public void applySepia() {
     //Matrix
@@ -343,6 +345,10 @@ public class ConcreteImageModel implements ImageModel {
 
   }
 
+
+  /**
+   * This method applies a dither effect to a loaded image.
+   */
   @Override
   public void applyDither() {
     this.applyGrayscale();
@@ -350,16 +356,16 @@ public class ConcreteImageModel implements ImageModel {
     for (int row = 0; row < this.height; row++) {
       for (int col = 0; col < this.width; col++) {
         // main algorithm
-        int old_color;
-        old_color = this.image[row][col][0];
+        int oldColor;
+        oldColor = this.image[row][col][0];
         int newColor;
-        if (old_color < 127) {
+        if (oldColor < 127) {
           newColor = 0;
         } else {
           newColor = 255;
         }
         int error;
-        error = old_color - newColor;
+        error = oldColor - newColor;
         this.image[row][col][0] = newColor;
         this.image[row][col][1] = newColor;
         this.image[row][col][2] = newColor;
@@ -371,19 +377,6 @@ public class ConcreteImageModel implements ImageModel {
         addColor(row + 1, col, error * 0.3125);
         // next-row-right
         addColor(row + 1, col + 1, error * 0.0625);
-      }
-    }
-  }
-
-  // TO BE DELETED
-  private void printValues() {
-    for (int row = 0; row < this.height; row++) {
-      for (int col = 0; col < this.width; col++) {
-        int value = image[row][col][0];
-        if (value != 255 && value != 0) {
-          throw new IllegalStateException("WRONG VALUE Found");
-        }
-        System.out.println(value);
       }
     }
   }
@@ -416,7 +409,7 @@ public class ConcreteImageModel implements ImageModel {
     }
     int totalPixels;
     totalPixels = this.width * this.height;
-    if (seeds > totalPixels || seeds == 0) {
+    if (seeds >= totalPixels || seeds == 0) {
       // filter will have no effect.
       return;
     }
@@ -427,7 +420,7 @@ public class ConcreteImageModel implements ImageModel {
     //create lists of all possible coordinates
     for (int r = 0; r < this.height; r++) {
       for (int c = 0; c < this.width; c++) {
-        int coor[];
+        int[] coor;
         coor = new int[2];
         coor[0] = r;
         coor[1] = c;
@@ -457,7 +450,7 @@ public class ConcreteImageModel implements ImageModel {
     }
 
     // assign each of the remaining pixels to a cluster
-    for (int[] pixel: coordinates){
+    for (int[] pixel : coordinates) {
       int row;
       int col;
       row = pixel[0];
@@ -468,12 +461,12 @@ public class ConcreteImageModel implements ImageModel {
       closestDistance = 999999999;
 
       // calculate closest cluster center
-      for (Cluster currentCluster: clusters) {
+      for (Cluster currentCluster : clusters) {
         int[] center;
         center = currentCluster.getCenter();
         int currentDistance;
         currentDistance = calculateDistance(row, col, center[0], center[1]);
-        if (currentDistance < closestDistance){
+        if (currentDistance < closestDistance) {
           closestCluster = currentCluster;
           closestDistance = currentDistance;
         }
@@ -490,10 +483,10 @@ public class ConcreteImageModel implements ImageModel {
     }
 
     // calculate averages and modify image;
-    for (Cluster currentCluster: clusters){
+    for (Cluster currentCluster : clusters) {
       int[] clusterAverage;
       clusterAverage = currentCluster.calculateAverage();
-      for (int[] currentPixel: currentCluster.getAllCoordinates()){
+      for (int[] currentPixel : currentCluster.getAllCoordinates()) {
         this.image[currentPixel[0]][currentPixel[1]][0] = clusterAverage[0];
         this.image[currentPixel[0]][currentPixel[1]][1] = clusterAverage[1];
         this.image[currentPixel[0]][currentPixel[1]][2] = clusterAverage[2];
@@ -502,11 +495,11 @@ public class ConcreteImageModel implements ImageModel {
   }
 
   /*
-  helper function that calculates the closest distance
+  helper function that calculates the closest distance between to points;
    */
-  private int calculateDistance(int p1, int p2, int q1, int q2){
+  private int calculateDistance(int p1, int p2, int q1, int q2) {
     int distance;
-    distance = (int) Math.sqrt( Math.pow((q1 - p1), 2) + Math.pow((q2 - p2), 2) );
+    distance = (int) Math.sqrt(Math.pow((q1 - p1), 2) + Math.pow((q2 - p2), 2));
     return distance;
   }
 }

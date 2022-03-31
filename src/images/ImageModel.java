@@ -1,5 +1,8 @@
 package images;
 
+/**
+ * Interface for an image model.
+ */
 public interface ImageModel {
 
   /**

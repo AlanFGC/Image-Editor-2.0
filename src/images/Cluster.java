@@ -10,7 +10,7 @@ import java.util.List;
  * The relation between coordinate and rgb value is
  * not guaranteed to be accurate.
  */
-public class Cluster {
+public class Cluster implements ClusterInterface {
   private int rowCenter;
   private int colCenter;
   private List<int[]> coordinates;
@@ -19,14 +19,15 @@ public class Cluster {
 
   /**
    * This method generates a new cluster using a center
-   * pixel;
+   * pixel.
+   *
    * @param row row where the center pixel is located
    * @param col column where the center pixel is located
-   * @param r red value of the center pixel
-   * @param g green value of the center pixel
-   * @param b blue value of the center pixel
+   * @param r   red value of the center pixel
+   * @param g   green value of the center pixel
+   * @param b   blue value of the center pixel
    */
-  public Cluster(int row, int col, int r, int g, int b){
+  public Cluster(int row, int col, int r, int g, int b) {
     rowCenter = row;
     colCenter = col;
     coordinates = new LinkedList<>();
@@ -37,14 +38,16 @@ public class Cluster {
   }
 
   /**
-   * This method adds a pixel to a cluster
+   * This method adds a pixel to a cluster.
+   *
    * @param row row where the pixel is located
    * @param col column where the pixel is located
-   * @param r red value of the pixel
-   * @param g green value of the pixel
-   * @param b blue value of the pixel
+   * @param r   red value of the pixel
+   * @param g   green value of the pixel
+   * @param b   blue value of the pixel
    */
-  public void add(int row, int col, int r, int g, int b){
+  @Override
+  public void add(int row, int col, int r, int g, int b) {
     int[] rgb;
     rgb = new int[3];
     // colors
@@ -63,10 +66,12 @@ public class Cluster {
   /**
    * Calculates the average rgb value of the whole cluster
    * including its center pixel.
+   *
    * @return rgb value in the form of an array of size 3
    */
-  public int[] calculateAverage(){
-    int rgb[];
+  @Override
+  public int[] calculateAverage() {
+    int[] rgb;
     rgb = new int[3];
     int sumR;
     int sumG;
@@ -76,7 +81,7 @@ public class Cluster {
     sumB = 0;
 
     // calculate average
-    for (int[] member: colors) {
+    for (int[] member : colors) {
       sumR += member[0];
       sumG += member[1];
       sumB += member[2];
@@ -98,18 +103,22 @@ public class Cluster {
   /**
    * Getter method for all the list of all the coordinates inside
    * the cluster.
+   *
    * @return a list of arrays of size 2 containing the coordinates of each pixel
    */
-  public List<int[]> getAllCoordinates(){
+  @Override
+  public List<int[]> getAllCoordinates() {
     return coordinates;
   }
 
   /**
    * Getter method for the coordinates of the center pixel.
+   *
    * @return an array of size 2 with the coordinates of the center pixel (row/column).
    */
-  public int[] getCenter(){
-    int center[];
+  @Override
+  public int[] getCenter() {
+    int[] center;
     center = new int[2];
     center[0] = this.rowCenter;
     center[1] = this.colCenter;
