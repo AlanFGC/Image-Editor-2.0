@@ -1,11 +1,8 @@
-package Script;
+package script;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStreamReader;
-
-import javax.management.modelmbean.ModelMBean;
 
 import images.ConcreteImageModel;
 import images.ImageModel;
