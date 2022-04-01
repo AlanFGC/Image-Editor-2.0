@@ -42,16 +42,17 @@ public class ConcreteImageModel implements ImageModel {
   @Override
   public void loadImage(String filename) throws IllegalArgumentException {
     try {
+      image = readImage(filename);
       this.width = getWidth(filename);
       this.height = getHeight(filename);
-      image = readImage(filename);
-    } catch (IllegalArgumentException e) {
-      System.out.println(e);
-      return;
+
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new IllegalArgumentException("error when reading a file");
+    }catch (NullPointerException e){
+      throw new IllegalArgumentException("No file with that name was accessible");
     }
-    System.out.println(String.format("Successfully loaded %s", filename));
+
+
   }
 
   /**
@@ -64,11 +65,9 @@ public class ConcreteImageModel implements ImageModel {
   public void saveImage(String filename) throws IllegalArgumentException {
     try {
       writeImage(image, filename);
-    } catch (IllegalArgumentException e) {
-      System.out.println(e);
-      return;
+    } catch (ArrayIndexOutOfBoundsException e){
+      throw new IllegalArgumentException("Could not save the file with that name.");
     }
-    System.out.println(String.format("Successfully saved image to %s file", filename));
   }
 
   /**
@@ -83,7 +82,6 @@ public class ConcreteImageModel implements ImageModel {
     double[][] blur;
     blur = new double[3][3];
     blur[0][0] = 0.0625;
-    System.out.println(blur[0][0]);
     blur[0][1] = 0.125;
     blur[0][2] = 0.0625;
 
@@ -495,7 +493,7 @@ public class ConcreteImageModel implements ImageModel {
   }
 
   /*
-  helper function that calculates the closest distance between to points;
+  helper function that calculates the closest distance between two points;
    */
   private int calculateDistance(int p1, int p2, int q1, int q2) {
     int distance;

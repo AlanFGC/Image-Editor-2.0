@@ -1,0 +1,10 @@
+load
+res/squirrel.jpg
+blur
+blur
+sepia
+mosaic
+1000
+save
+res/test.jpg
+quit
