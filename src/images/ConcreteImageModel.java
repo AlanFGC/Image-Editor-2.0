@@ -74,7 +74,10 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a 'blur' effect to the current image.
    */
   @Override
-  public void applyBlur() {
+  public void applyBlur() throws IllegalStateException{
+    if (width == 0 && height == 0){
+      throw new IllegalStateException("Image has not been loaded.");
+    }
     //New image
     int[][][] newImage;
     newImage = new int[this.height][this.width][3];
@@ -110,9 +113,10 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a 'sharpen' effect to the current image.
    */
   @Override
-  public void applySharpen() {
-    // WARNING, sharpen might have a bug!
-    // please grade another one since this one is somewhat incomplete.
+  public void applySharpen() throws IllegalStateException{
+    if (width == 0 && height == 0){
+      throw new IllegalStateException("Image has not been loaded.");
+    }
 
     //New image
     int[][][] newImage;
@@ -256,7 +260,10 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a grayscale effect to a loaded image.
    */
   @Override
-  public void applyGrayscale() {
+  public void applyGrayscale() throws IllegalStateException{
+    if (width == 0 && height == 0){
+      throw new IllegalStateException("Image has not been loaded.");
+    }
     double r = 0.2126;
     double g = 0.7152;
     double b = 0.0722;
@@ -282,7 +289,10 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a Sepia effect to a loaded image.
    */
   @Override
-  public void applySepia() {
+  public void applySepia()throws IllegalStateException {
+    if (width == 0 && height == 0){
+      throw new IllegalStateException("Image has not been loaded.");
+    }
     //Matrix
     double[][] rgb = new double[3][3];
     rgb[0][0] = 0.393;
@@ -348,7 +358,10 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a dither effect to a loaded image.
    */
   @Override
-  public void applyDither() {
+  public void applyDither() throws IllegalStateException{
+    if (width == 0 && height == 0){
+      throw new IllegalStateException("Image has not been loaded.");
+    }
     this.applyGrayscale();
     //apply dither
     for (int row = 0; row < this.height; row++) {
@@ -401,7 +414,10 @@ public class ConcreteImageModel implements ImageModel {
    * @throws IllegalArgumentException if the number of seeds is not positive
    */
   @Override
-  public void applyMosaic(int seeds) throws IllegalArgumentException {
+  public void applyMosaic(int seeds) throws IllegalArgumentException, IllegalStateException{
+    if (width == 0 && height == 0){
+      throw new IllegalStateException("Image has not been loaded.");
+    }
     if (seeds < 0) {
       throw new IllegalArgumentException("Number of seeds is not positive");
     }

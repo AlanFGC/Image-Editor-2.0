@@ -1,35 +1,20 @@
 package script;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.Scanner;
 
 import images.ImageModel;
 
+/**
+ * Controller for image editor.
+ * Can use readable inputs and
+ * file inputs.
+ */
 public class ImageController {
   // Fields
   private ImageView view;
   private ImageModel model;
   private Scanner input;
-  private Appendable output;
 
-
-  /**
-   * Constructor for ImageController, uses a script for
-   * inputs.
-   *
-   * @param fileName readable type object for inputs.
-   */
-  ImageController(String fileName) throws FileNotFoundException {
-    model = null;
-    view = null;
-    File file;
-    file = new File(fileName);
-    Readable fileReader;
-    fileReader = new FileReader(file);
-    this.input = new Scanner(fileReader);
-  }
 
   /**
    * Standard constructor for ImageController, uses a standard
@@ -37,12 +22,18 @@ public class ImageController {
    *
    * @param input readable type object for inputs.
    */
-  ImageController(Readable input) {
+  public ImageController(Readable input) {
     model = null;
     view = null;
     this.input = new Scanner(input);
   }
 
+  /**
+   * Starts the program.
+   *
+   * @param v a compatible ImageView object
+   * @param m a compatible ModelView object
+   */
   public void go(ImageView v, ImageModel m) {
     model = m;
     view = v;
@@ -62,7 +53,9 @@ public class ImageController {
     cmd = "";
     String error[];
     error = null;
+    // show instructions
     view.displayInstructions(inst);
+    // start loop
     while (!(cmd.equals("quit"))) {
       cmd = input.next();
       try {
@@ -101,7 +94,7 @@ public class ImageController {
             view.displayMsg("Filter successfully applied.");
             break;
           case "blur":
-            view.displayMsg("Applying blurring filter...");
+            view.displayMsg("Applying blur filter...");
             model.applyBlur();
             view.displayMsg("Filter successfully applied.");
             break;
@@ -120,14 +113,13 @@ public class ImageController {
             view.displayMsg("Filter successfully applied.");
             break;
           default:
-            view.displayMsg("Please enter a valid command:");
+            view.displayMsg("Please enter a valid command or value:");
         }
 
       } catch (IllegalStateException e) {
         error = e.toString().split(": ");
         view.displayMsg(error[1]);
-        cmd = "quit";
-      } catch (IllegalArgumentException e){
+      } catch (IllegalArgumentException e) {
         error = e.toString().split(": ");
         view.displayMsg(error[1]);
       }

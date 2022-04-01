@@ -1,0 +1,3 @@
+blur sepia mosaic 1000 save res/test1.jpg load res/city.jpg sharpen dither save
+res/test2.jpg
+quit

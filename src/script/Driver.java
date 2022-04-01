@@ -12,7 +12,7 @@ import images.ImageModel;
  */
 public class Driver {
   public static void main(String[] args) throws FileNotFoundException {
-    File file = new File(args[1]);
+    File file = new File(args[0]);
     Readable fileReader = new FileReader(file);
     ImageController controller = new ImageController(fileReader);
     ImageView view;
