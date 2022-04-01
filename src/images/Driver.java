@@ -3,7 +3,7 @@ package images;
 /**
  * Main driver class for the program.
  */
-public class TestingDriver {
+public class Driver {
 
   /**
    * This is the main driver of the program.

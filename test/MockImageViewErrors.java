@@ -3,10 +3,10 @@ import script.ImageView;
 /**
  * Mock Image view implementation for testing.
  */
-public class MockImageView implements ImageView {
+public class MockImageViewErrors implements ImageView {
   private StringBuilder log;
 
-  MockImageView(StringBuilder log) {
+  MockImageViewErrors(StringBuilder log) {
     this.log = log;
   }
 
@@ -36,5 +36,6 @@ public class MockImageView implements ImageView {
   @Override
   public void displayMsg(String s) {
     log.append(s);
+    throw new IllegalStateException("ERROR");
   }
 }

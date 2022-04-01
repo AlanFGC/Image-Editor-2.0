@@ -1,7 +1,6 @@
 package script;
 
 import java.util.Scanner;
-
 import images.ImageModel;
 
 /**

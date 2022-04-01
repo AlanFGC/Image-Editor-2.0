@@ -1,9 +1,9 @@
 import images.ImageModel;
 
 /**
- * Mock Image model for testing.
+ * Mock Image model for testing. Throws exceptions for testing.
  */
-public class MockImageModeLogged implements ImageModel {
+public class MockImageModelErrors implements ImageModel {
   private StringBuilder log;
 
   /**
@@ -11,7 +11,7 @@ public class MockImageModeLogged implements ImageModel {
    *
    * @param log a log to append inputs to.
    */
-  MockImageModeLogged(StringBuilder log) {
+  MockImageModelErrors(StringBuilder log) {
     this.log = log;
   }
 
@@ -55,8 +55,9 @@ public class MockImageModeLogged implements ImageModel {
    * Mock method.
    */
   @Override
-  public void applyGrayscale() {
+  public void applyGrayscale() throws IllegalStateException {
     log.append("-grayscale");
+    throw new IllegalStateException("ERROR");
 
   }
 
@@ -80,7 +81,8 @@ public class MockImageModeLogged implements ImageModel {
    * Mock method.
    */
   @Override
-  public void applyMosaic(int seeds) {
+  public void applyMosaic(int seeds) throws IllegalArgumentException {
     log.append("-mosaic-" + String.format("%d", seeds));
+    throw new IllegalArgumentException("ERROR");
   }
 }

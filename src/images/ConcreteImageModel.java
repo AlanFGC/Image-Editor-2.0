@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /**
  * This class is the model implementation of a system that
  * applies different filters to an image. Loads an image to memory then saves
@@ -48,7 +47,7 @@ public class ConcreteImageModel implements ImageModel {
 
     } catch (IOException e) {
       throw new IllegalArgumentException("error when reading a file");
-    }catch (NullPointerException e){
+    } catch (NullPointerException e) {
       throw new IllegalArgumentException("No file with that name was accessible");
     }
 
@@ -65,7 +64,7 @@ public class ConcreteImageModel implements ImageModel {
   public void saveImage(String filename) throws IllegalArgumentException {
     try {
       writeImage(image, filename);
-    } catch (ArrayIndexOutOfBoundsException e){
+    } catch (ArrayIndexOutOfBoundsException e) {
       throw new IllegalArgumentException("Could not save the file with that name.");
     }
   }
@@ -74,9 +73,9 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a 'blur' effect to the current image.
    */
   @Override
-  public void applyBlur() throws IllegalStateException{
-    if (width == 0 && height == 0){
-      throw new IllegalStateException("Image has not been loaded.");
+  public void applyBlur() {
+    if (width == 0 && height == 0) {
+      return;
     }
     //New image
     int[][][] newImage;
@@ -113,9 +112,9 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a 'sharpen' effect to the current image.
    */
   @Override
-  public void applySharpen() throws IllegalStateException{
-    if (width == 0 && height == 0){
-      throw new IllegalStateException("Image has not been loaded.");
+  public void applySharpen() {
+    if (width == 0 && height == 0) {
+      return;
     }
 
     //New image
@@ -260,9 +259,9 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a grayscale effect to a loaded image.
    */
   @Override
-  public void applyGrayscale() throws IllegalStateException{
-    if (width == 0 && height == 0){
-      throw new IllegalStateException("Image has not been loaded.");
+  public void applyGrayscale() {
+    if (width == 0 && height == 0) {
+      return;
     }
     double r = 0.2126;
     double g = 0.7152;
@@ -289,9 +288,9 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a Sepia effect to a loaded image.
    */
   @Override
-  public void applySepia()throws IllegalStateException {
-    if (width == 0 && height == 0){
-      throw new IllegalStateException("Image has not been loaded.");
+  public void applySepia() {
+    if (width == 0 && height == 0) {
+      return;
     }
     //Matrix
     double[][] rgb = new double[3][3];
@@ -358,9 +357,9 @@ public class ConcreteImageModel implements ImageModel {
    * This method applies a dither effect to a loaded image.
    */
   @Override
-  public void applyDither() throws IllegalStateException{
-    if (width == 0 && height == 0){
-      throw new IllegalStateException("Image has not been loaded.");
+  public void applyDither() throws IllegalStateException {
+    if (width == 0 && height == 0) {
+      return;
     }
     this.applyGrayscale();
     //apply dither
@@ -414,9 +413,9 @@ public class ConcreteImageModel implements ImageModel {
    * @throws IllegalArgumentException if the number of seeds is not positive
    */
   @Override
-  public void applyMosaic(int seeds) throws IllegalArgumentException, IllegalStateException{
-    if (width == 0 && height == 0){
-      throw new IllegalStateException("Image has not been loaded.");
+  public void applyMosaic(int seeds) throws IllegalArgumentException {
+    if (width == 0 && height == 0) {
+      return;
     }
     if (seeds < 0) {
       throw new IllegalArgumentException("Number of seeds is not positive");

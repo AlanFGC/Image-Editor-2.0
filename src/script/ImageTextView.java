@@ -12,11 +12,11 @@ public class ImageTextView implements ImageView {
   @Override
   public void displayInstructions(String inst) {
     String Space = "====================================\n";
-    try{
+    try {
       output.append(Space);
       output.append(inst);
       output.append(Space);
-    }catch (IOException e) {
+    } catch (IOException e) {
       throw new IllegalStateException("Could not display instructions");
     }
   }
@@ -25,18 +25,18 @@ public class ImageTextView implements ImageView {
   public void askForFile() throws IllegalStateException {
     String msg;
     msg = "Please enter the image path you wish to edit:\n";
-    try{
+    try {
       output.append(msg);
-    }catch (IOException e) {
+    } catch (IOException e) {
       throw new IllegalStateException("Could not ask for a file");
     }
   }
 
   @Override
   public void displayMsg(String msg) {
-    try{
+    try {
       output.append(msg + "\n");
-    }catch (IOException e) {
+    } catch (IOException e) {
       throw new IllegalStateException("Could not display message");
     }
   }

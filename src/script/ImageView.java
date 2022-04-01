@@ -17,6 +17,7 @@ public interface ImageView {
 
   /**
    * Displays a given message.
+   *
    * @param s message to be displayed.
    */
   public void displayMsg(String s);

@@ -1,3 +1,15 @@
-blur sepia mosaic 1000 save res/test1.jpg load res/city.jpg sharpen dither save
+load res/squirrel.jpg
+blur
+mosaic 1000
+gray
+save
+res/test1.jpg
+load res/city.jpg
+sharp
+sepia
+save
 res/test2.jpg
+dither
+save
+res/test3.jpg
 quit
