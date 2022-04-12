@@ -29,9 +29,13 @@ to save to a new file.
 
 ##Examples
 ### Text controller example:
-Mosaic Effect:
+(Short example) Mosaic Effect:
 `load imagePath mosaic 1000 save newImagePath quit`
-
+The **input.txt** script found in /res works the same way by using __load__ then the name
+of the file. Then we can apply any filter in the list from the examples shown, 
+if you type __options__ you can get the whole list of commands.
+To save we simply type __save__ then the name of our new file.
+s
 ##Credits
 This project is part of class CS-5004 course at Northeastern University.
 ### Images  used:
@@ -48,4 +52,5 @@ N. Poupart, Architectural Photography Of City. Pexels, 2019.
 ### Sites  used:
 “Java™ Platform Standard Ed. 7,” Java™ Platform, Standard Edition 7 API Specification.
 [Online]. Available:
-https://docs.oracle.com/javase/7/docs/api/index.html. [Accessed: 01-Apr-2022]. 
+https://docs.oracle.com/javase/7/docs/api/index.html. [Accessed: 01-Apr-2022].
+https://www.freeiconspng.com/img/23483

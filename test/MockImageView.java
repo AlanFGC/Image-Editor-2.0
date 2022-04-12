@@ -6,12 +6,17 @@ import script.ImageView;
 public class MockImageView implements ImageView {
   private StringBuilder log;
 
+  /**
+   * Constructor for this object.
+   *
+   * @param log a log to append inputs to.
+   */
   MockImageView(StringBuilder log) {
     this.log = log;
   }
 
   /**
-   * displays instrucctions.
+   * displays instructions.
    *
    * @param inst input string
    */

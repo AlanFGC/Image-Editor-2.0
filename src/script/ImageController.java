@@ -1,7 +1,7 @@
 package script;
 
-import java.util.Scanner;
 import images.ImageModel;
+import java.util.Scanner;
 
 /**
  * Controller for image editor.
@@ -50,12 +50,12 @@ public class ImageController {
     inst += "mosaic - to apply mosaic filter\n";
     String cmd;
     cmd = "";
-    String error[];
+    String[] error;
     error = null;
     // show instructions
     view.displayInstructions(inst);
     // start loop
-    while (!(cmd.equals("quit"))) {
+    while (cmd.compareTo("quit") != 0) {
       cmd = input.next();
       try {
         switch (cmd) {

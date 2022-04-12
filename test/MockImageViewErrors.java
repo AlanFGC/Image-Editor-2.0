@@ -6,6 +6,11 @@ import script.ImageView;
 public class MockImageViewErrors implements ImageView {
   private StringBuilder log;
 
+  /**
+   * Constructor for this object.
+   *
+   * @param log a log to append inputs to.
+   */
   MockImageViewErrors(StringBuilder log) {
     this.log = log;
   }

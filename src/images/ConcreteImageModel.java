@@ -1,10 +1,12 @@
 package images;
 
+import static images.ImageUtilities.convertImage;
 import static images.ImageUtilities.getHeight;
 import static images.ImageUtilities.getWidth;
 import static images.ImageUtilities.readImage;
 import static images.ImageUtilities.writeImage;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -505,6 +507,19 @@ public class ConcreteImageModel implements ImageModel {
         this.image[currentPixel[0]][currentPixel[1]][2] = clusterAverage[2];
       }
     }
+  }
+
+  /**
+   * Returns the current image that is stored in memory.
+   *
+   * @return a BufferedImage that is currently loaded into memory.
+   */
+  @Override
+  public BufferedImage getImage() {
+    if (this.image.length == 0){
+      return null;
+    }
+    return convertImage(this.image);
   }
 
   /*

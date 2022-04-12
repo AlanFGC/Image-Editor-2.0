@@ -1,5 +1,8 @@
 package script;
 
+/**
+ * View interface for image Editor.
+ */
 public interface ImageView {
   /**
    * Displays Instructions for the program.

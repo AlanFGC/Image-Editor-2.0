@@ -1,14 +1,12 @@
-
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.StringReader;
+import static org.junit.Assert.assertEquals;
 
 import images.ImageModel;
+import java.io.StringReader;
+import org.junit.Before;
+import org.junit.Test;
 import script.ImageController;
 import script.ImageView;
 
-import static org.junit.Assert.assertEquals;
 
 /**
  * Test cases for the Image controller, this uses mocks to test
@@ -362,7 +360,7 @@ public class ImageControllerTest {
    * Handling IllegalArguments exception from the model.
    */
   @Test
-  public void IllegalArgumentExceptionModel() {
+  public void illegalArgumentExceptionModel() {
     StringBuilder modelLog = new StringBuilder();
     ImageModel model;
     model = new MockImageModelErrors(modelLog);
@@ -381,8 +379,8 @@ public class ImageControllerTest {
     assertEquals(expectedM, modelLog.toString());
     //Expected view log:
     String expectedV;
-    expectedV = instructions + "Please enter the number of seeds:Applying mosaic filter..." +
-            "ERRORGoodbye!";
+    expectedV = instructions + "Please enter the number of seeds:Applying mosaic filter..."
+            + "ERRORGoodbye!";
     assertEquals(expectedV, viewLog.toString());
   }
 
@@ -392,7 +390,7 @@ public class ImageControllerTest {
    * because there is no fix in the event this happens.
    */
   @Test(expected = IllegalStateException.class)
-  public void IllegalStateExceptionView() {
+  public void illegalStateExceptionView() {
     StringBuilder modelLog = new StringBuilder();
     ImageModel model;
     model = new MockImageModeLogged(modelLog);

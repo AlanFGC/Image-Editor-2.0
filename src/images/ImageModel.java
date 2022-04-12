@@ -1,5 +1,7 @@
 package images;
 
+import java.awt.image.BufferedImage;
+
 /**
  * Interface for an image model.
  */
@@ -55,5 +57,11 @@ public interface ImageModel {
    * @throws IllegalArgumentException if the number of seeds is not positive
    */
   public void applyMosaic(int seeds) throws IllegalArgumentException;
+
+  /**
+   * Returns the current image that is stored in memory.
+   * @return a BufferedImage that is currently loaded into memory.
+   */
+  public BufferedImage getImage();
 
 }

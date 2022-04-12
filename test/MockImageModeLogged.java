@@ -1,3 +1,5 @@
+import java.awt.image.BufferedImage;
+
 import images.ImageModel;
 
 /**
@@ -82,5 +84,15 @@ public class MockImageModeLogged implements ImageModel {
   @Override
   public void applyMosaic(int seeds) {
     log.append("-mosaic-" + String.format("%d", seeds));
+  }
+
+  /**
+   * Returns the current image that is stored in memory.
+   *
+   * @return a BufferedImage that is currently loaded into memory.
+   */
+  @Override
+  public BufferedImage getImage() {
+    return null;
   }
 }

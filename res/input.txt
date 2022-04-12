@@ -13,3 +13,5 @@ dither
 save
 res/test3.jpg
 quit
+
+// THIS IS A SCRIPT THAT APPLIES ALL FILTERS UP TO THIS POINT.
