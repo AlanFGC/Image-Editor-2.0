@@ -50,7 +50,12 @@ public class GeneralListener implements ActionListener, KeyListener {
       case "dither-image":
         gui.dither();
         break;
-      case "mosaic-image":
+      case "mosaic-open-menu":
+        System.out.println("mosaic-open-menu");
+        gui.mosaicMenu();
+      case "mosaic-send":
+        System.out.println("mosaic-send");
+        gui.mosaic();
     }
   }
 

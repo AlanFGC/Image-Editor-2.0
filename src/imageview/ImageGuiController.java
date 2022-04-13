@@ -21,7 +21,7 @@ public class ImageGuiController implements ImageFeatures {
   /**
    * Starts the program.
    *
-   * @param view
+   * @param view a gui implementation with action and key Listeners.
    */
   @Override
   public void go(ImageViewGuiInterface view) {
@@ -116,7 +116,7 @@ public class ImageGuiController implements ImageFeatures {
    * Tells the controller to apply the mosaic
    * filter.
    *
-   * @param seed
+   * @param seed the amount of seeds for the given image.
    */
   @Override
   public boolean mosaic(int seed) {
@@ -137,7 +137,9 @@ public class ImageGuiController implements ImageFeatures {
    */
   @Override
   public BufferedImage getCurrentImage() {
-    return model.getImage();
+    BufferedImage image;
+    image = model.getImage();
+    return image;
   }
 
   /**

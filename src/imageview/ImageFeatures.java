@@ -61,6 +61,7 @@ public interface ImageFeatures {
   /**
    * Tells the controller to apply the mosaic
    * filter.
+   * @param seed the amount of seeds for the given image.
    */
   boolean mosaic(int seed);
 

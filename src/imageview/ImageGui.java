@@ -18,27 +18,23 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
   //Event Listener
   GeneralListener listener;
   // Top Menu:
-  private JMenuBar bar;
   private JMenuItem loadTop;
   private JMenuItem saveTop;
   private JMenuItem exitTop;
-  private JMenu fileMenu;
   // Image area
-  private JScrollPane imagePane;
   private JLabel imageLabel;
   private JFileChooser fileChooser;
   // sidebar
-  private JPanel sideBar;
   private JButton blur;
   private JButton sharpen;
   private JButton grayscale;
   private JButton sepia;
   private JButton dither;
-  private JPanel mosaicPanel;
   private JButton mosaic;
+  private MosaicPopup mosaicPopup;
   //default Font
-  private Font defaultFont;
-  private Font buttonFont;
+  public Font defaultFont;
+  public Font buttonFont;
 
 
   /**
@@ -63,6 +59,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
     //menu bar
+    JMenuBar bar;
     bar = new JMenuBar();
     bar.setBorderPainted(true);
     bar.setPreferredSize(new Dimension(250, 50));
@@ -79,6 +76,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
     exitTop.setFont(defaultFont);
 
     //fileMenu
+    JMenu fileMenu;
     fileMenu = new JMenu("File");
     fileMenu.setPreferredSize(new Dimension(70, 70));
     fileMenu.setFont(defaultFont);
@@ -94,9 +92,11 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
     ImageIcon tempImage;
     tempImage = new ImageIcon("res/no-image.png");
     imageLabel = new JLabel(tempImage);
+    JScrollPane imagePane;
     imagePane = new JScrollPane(imageLabel);
 
     // sidebar
+    JPanel sideBar;
     sideBar = new JPanel(new FlowLayout());
     sideBar.setBackground(new Color(255, 255, 255));
     sideBar.setPreferredSize(new Dimension(300, 600));
@@ -131,19 +131,11 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
     dither.setFont(buttonFont);
     dither.setActionCommand("dither-image");
     // mosaic panel
-    mosaicPanel = new JPanel();
-    mosaicPanel.setPreferredSize(new Dimension(300, 300));
     mosaic = new JButton("Mosaic");
     mosaic.setPreferredSize(buttonSize);
     mosaic.setFont(buttonFont);
     mosaic.setActionCommand("mosaic-open-menu");
-    JLabel seedLabel;
-    seedLabel = new JLabel("Seeds:");
-    JTextField seedText;
-    seedText = new JTextField("10");
-    mosaicPanel.add(mosaic);
-    mosaicPanel.add(seedLabel);
-    mosaicPanel.add(seedText);
+    mosaicPopup = null;
 
     //ADD BUTTONS TO Sidebar
     sideBar.add(blur);
@@ -151,7 +143,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
     sideBar.add(grayscale);
     sideBar.add(sepia);
     sideBar.add(dither);
-    sideBar.add(mosaicPanel);
+    sideBar.add(mosaic);
 
     //Add all components to frame
     this.setJMenuBar(bar);
@@ -160,28 +152,53 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
     setVisible(true);
   }
 
+  /**
+   * Tells the controller to apply blur filter.
+   */
   public void blur(){
     controller.blur();
   }
 
+  /**
+   * Tells the controller to apply sharpen filter.
+   */
   public void sharpen(){
     controller.sharpen();
   }
 
+  /**
+   * Tells the controller to apply grayscale filter.
+   */
   public void grayscale(){
     controller.grayscale();
   }
 
+  /**
+   * Tells the controller to apply sepia filter.
+   */
   public void sepia(){
     controller.sepia();
   }
 
+  /**
+   * Tells the controller to apply dither filter.
+   */
   public void dither(){
     controller.dither();
   }
 
-  public void mosaic(int seeds){
-    controller.mosaic(seeds);
+  public void mosaicMenu(){
+    mosaicPopup.openPopup();
+  }
+
+
+  /**
+   * Tells the controller to apply mosaic filter.
+   */
+  public void mosaic(){
+    int seed;
+    seed = mosaicPopup.getValue();
+    controller.mosaic(seed);
   }
 
   /**
@@ -211,29 +228,11 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
    * This method tells the controller to update the current image.
    */
   public void updateImage(BufferedImage image){
-      ImageIcon icon;
-      icon = new ImageIcon(image);
-      this.imageLabel.setIcon(icon);
-  }
-
-  /**
-   * This method assigns all controller to the current model.
-   *
-   * @param features a controller that implements all the features listed.
-   */
-  @Override
-  public void addFeatures(ImageFeatures features) {
-    this.controller = features;
-    listener = new GeneralListener(this);
-    loadTop.addActionListener(listener);
-    saveTop.addActionListener(listener);
-    exitTop.addActionListener(listener);
-    blur.addActionListener(listener);
-    sharpen.addActionListener(listener);
-    grayscale.addActionListener(listener);
-    sepia.addActionListener(listener);
-    dither.addActionListener(listener);
-    mosaic.addActionListener(listener);
+      if (image != null){
+        ImageIcon icon;
+        icon = new ImageIcon(image);
+        this.imageLabel.setIcon(icon);
+      }
   }
 
   /**
@@ -246,6 +245,33 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
 
   }
 
+
+  /**
+   * This method assigns all controller to the current model.
+   *
+   * @param features a controller that implements all the features listed.
+   */
+  @Override
+  public void addFeatures(ImageFeatures features) {
+    this.controller = features;
+    listener = new GeneralListener(this);
+    //PopUP window
+    mosaicPopup = new MosaicPopup(this, "Mosaic Settings", listener);
+    //Buttons
+    loadTop.addActionListener(listener);
+    saveTop.addActionListener(listener);
+    exitTop.addActionListener(listener);
+    blur.addActionListener(listener);
+    sharpen.addActionListener(listener);
+    grayscale.addActionListener(listener);
+    sepia.addActionListener(listener);
+    dither.addActionListener(listener);
+    mosaic.addActionListener(listener);
+  }
+
+  /**
+   * Tells the controller to exit the program.
+   */
   public void exitProgram(){
     controller.exitProgram();
   }
