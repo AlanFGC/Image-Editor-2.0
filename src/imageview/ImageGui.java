@@ -32,6 +32,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
   private JButton dither;
   private JButton mosaic;
   private MosaicPopup mosaicPopup;
+
   //default Font
   public Font defaultFont;
   public Font buttonFont;
@@ -53,7 +54,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInterface {
     buttonFont = new Font("sans-serif", Font.PLAIN, 20);
 
     //set initial parameters
-    this.setSize(1200, 800);
+    this.setSize(1500, 1000);
     this.setLocation(400,400);
     this.setLayout(new BorderLayout());
     this.setDefaultCloseOperation(EXIT_ON_CLOSE);

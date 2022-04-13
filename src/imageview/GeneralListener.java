@@ -51,11 +51,11 @@ public class GeneralListener implements ActionListener, KeyListener {
         gui.dither();
         break;
       case "mosaic-open-menu":
-        System.out.println("mosaic-open-menu");
         gui.mosaicMenu();
+        break;
       case "mosaic-send":
-        System.out.println("mosaic-send");
         gui.mosaic();
+        break;
     }
   }
 

@@ -41,11 +41,9 @@ public class MosaicPopup extends JFrame {
     spinner.setFont(gui.defaultFont);
     spinner.setModel(new SpinnerNumberModel(1, 0, 9999999, 1));
 
-
     accept = new JButton("Accept");
     accept.setPreferredSize(new Dimension(180, 50));
     accept.setFont(gui.buttonFont);
-    accept.setActionCommand("mosaic-send");
 
     cancel = new JButton("Cancel");
     cancel.setPreferredSize(new Dimension(180, 50));
@@ -77,6 +75,7 @@ public class MosaicPopup extends JFrame {
     cancel.addActionListener(evt -> setVisible(false));
     accept.addActionListener(listener);
     accept.addActionListener(evt -> setValue());
+    accept.setActionCommand("mosaic-send");
 
     // set visible false
     setVisible(false);
