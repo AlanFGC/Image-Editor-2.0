@@ -5,9 +5,9 @@ import images.ImageModel;
 
 public class Driver {
   public static void main(String[] args) {
-    ImageViewGuiInterface view;
+    ImageViewGuiInt view;
     ImageModel model;
-    ImageFeatures controller;
+    ImageGuiControlInt controller;
     model = new ConcreteImageModel();
     view = new ImageGui("Image Editor");
     controller = new ImageGuiController(model);

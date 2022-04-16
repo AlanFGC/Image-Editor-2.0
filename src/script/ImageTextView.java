@@ -12,7 +12,7 @@ public class ImageTextView implements ImageView {
    * View constructor.
    * @param out appendable object as an output for view.
    */
-  ImageTextView(Appendable out) {
+  public ImageTextView(Appendable out) {
     output = out;
   }
 

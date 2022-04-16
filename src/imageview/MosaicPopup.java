@@ -3,7 +3,6 @@ package imageview;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
@@ -12,7 +11,7 @@ import javax.swing.border.EmptyBorder;
  */
 public class MosaicPopup extends JFrame {
 
-  private GeneralListener listener;
+  private ActionListener listener;
   private int seeds;
   private JLabel prompt;
   private JSpinner spinner;
@@ -20,7 +19,7 @@ public class MosaicPopup extends JFrame {
   private JButton cancel;
   private ImageGui gui;
 
-  MosaicPopup(ImageGui gui, String caption, GeneralListener listener) {
+  MosaicPopup(ImageGui gui, String caption, ActionListener listener) {
     super(caption);
     this.listener = listener;
     this.gui = gui;
@@ -28,6 +27,8 @@ public class MosaicPopup extends JFrame {
     this.setLocation(400, 400);
     this.setLayout(new BorderLayout());
     this.setDefaultCloseOperation(HIDE_ON_CLOSE);
+    // set the accept button as the default when pressing enter key
+    this.getRootPane().setDefaultButton(accept);
     this.seeds = 0;
     //components
     prompt = new JLabel("Please enter the number of seeds:");
@@ -82,6 +83,7 @@ public class MosaicPopup extends JFrame {
   }
 
   public void openPopup() {
+    spinner.requestFocus();
     setVisible(true);
   }
 
