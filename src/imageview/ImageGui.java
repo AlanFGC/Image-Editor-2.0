@@ -1,11 +1,23 @@
 package imageview;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 
 /**
@@ -15,8 +27,10 @@ import javax.swing.*;
  * user.
  */
 public class ImageGui extends JFrame implements ImageViewGuiInt {
-  // field
-  private ImageGuiControlInt controller;
+
+  //default Font
+  public Font defaultFont;
+  public Font buttonFont;
   //Event Listener
   private ActionListener actListener;
   private KeyListener keyListener;
@@ -38,19 +52,14 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
   private MosaicPopup mosaicPopup;
   private MessagePopUp messagePopUp;
 
-  //default Font
-  public Font defaultFont;
-  public Font buttonFont;
-
 
   /**
-   * Creates the ui and all its components.
+   * Creates the ui and all of its components.
    */
-  public ImageGui(String caption) {
-    super(caption);
+  public ImageGui() {
+    super("Image Editor");
 
-    //Set listener and controller
-    controller = null;
+    //Set listener
     actListener = null;
     keyListener = null;
     //set File chooser
@@ -105,6 +114,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
 
     //create image pane
     ImageIcon tempImage;
+    //this needs to be defined in a different way, doesn't work with compiled version
     tempImage = new ImageIcon("res/no-image.png");
     imageLabel = new JLabel(tempImage);
     JScrollPane imagePane;
@@ -239,7 +249,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
   }
 
   /**
-   * This method tells the controller to update the current image.
+   * Updates current image.
    */
   @Override
   public void updateImage(BufferedImage image) {
@@ -262,25 +272,23 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
   }
 
   /**
-   * Resets focus to main JFrame.
+   * Resets focus to the main JFrame.
    */
   @Override
-  public void resetFocus(){
+  public void resetFocus() {
     this.setFocusable(true);
     this.requestFocus();
   }
 
+
   /**
-   * This method sets-up the controller and all action listeners necessary.
+   * This method sets-up all action listeners necessary.
    *
-   * @param controller  controller of the mvc application.
    * @param actListener ActionListener Object.
    * @param keyListener KeyListener Object.
    */
   @Override
-  public void setController(ImageGuiControlInt controller, ActionListener actListener,
-                            KeyListener keyListener) {
-    this.controller = controller;
+  public void setController(ActionListener actListener, KeyListener keyListener) {
     this.actListener = actListener;
     this.keyListener = keyListener;
 

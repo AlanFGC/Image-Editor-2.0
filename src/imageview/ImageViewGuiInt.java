@@ -5,22 +5,15 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
 /**
- * This is an interface for any implementation that is compatible with
+ * This is an interface for a GUI implementation that is compatible with
  * ImageGuiController, it must make use of all of its features.
  */
 public interface ImageViewGuiInt {
 
-  void resetFocus();
-
   /**
-   * Sets-up the controller and all action listeners necessary.
-   *
-   * @param controller  controller of the mvc application.
-   * @param actListener ActionListener Object.
-   * @param keyListener KeyListener Object.
+   * Resets focus.
    */
-  void setController(ImageGuiControlInt controller, ActionListener actListener,
-                     KeyListener keyListener);
+  void resetFocus();
 
   /**
    * Displays a give message to the user.
@@ -30,15 +23,15 @@ public interface ImageViewGuiInt {
   void displayMessage(String msg);
 
   /**
-   * This method tells the controller to update the current image.
+   * Updates current image.
    */
-  public void updateImage(BufferedImage image);
+  void updateImage(BufferedImage image);
 
 
   /**
    * Opens the pop-up menu for the mosaic filter.
    */
-  public void mosaicMenu();
+  void mosaicMenu();
 
 
   /**
@@ -47,16 +40,20 @@ public interface ImageViewGuiInt {
    *
    * @return how many seeds are needed for the filter.
    */
-  public int mosaicGetValue();
+  int mosaicGetValue();
 
   /**
    * Tells the controller which image should load.
    *
    * @return path of the selected file.
    */
-  public String getImagePathLoad();
+  String getImagePathLoad();
 
 
+  /**
+   * Gets path of a script file.
+   * @return path of script file
+   */
   String getScriptPath();
 
   /**
@@ -64,5 +61,13 @@ public interface ImageViewGuiInt {
    *
    * @return path to save image.
    */
-  public String getImagePathSave();
+  String getImagePathSave();
+
+  /**
+   * This method sets-up all action listeners necessary.
+   *
+   * @param actListener ActionListener Object.
+   * @param keyListener KeyListener Object.
+   */
+  void setController(ActionListener actListener, KeyListener keyListener);
 }

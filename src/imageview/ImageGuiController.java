@@ -1,12 +1,11 @@
 package imageview;
 
+import images.ImageModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-
-import images.ImageModel;
 import script.ImageController;
 import script.ImageTextView;
 
@@ -40,8 +39,7 @@ public class ImageGuiController implements ImageGuiControlInt {
   @Override
   public void go(ImageViewGuiInt view) {
     this.view = view;
-    view.setController(this, this, this);
-    view.resetFocus();
+    view.setController(this, this);
   }
 
   /**
@@ -58,7 +56,6 @@ public class ImageGuiController implements ImageGuiControlInt {
         return;
       }
     }
-    view.resetFocus();
   }
 
   /**
@@ -76,7 +73,6 @@ public class ImageGuiController implements ImageGuiControlInt {
         return;
       }
     }
-    view.resetFocus();
   }
 
   /**
@@ -93,7 +89,6 @@ public class ImageGuiController implements ImageGuiControlInt {
         return;
       }
     }
-    view.resetFocus();
     this.view.updateImage(this.model.getImage());
   }
 
@@ -128,7 +123,6 @@ public class ImageGuiController implements ImageGuiControlInt {
       return;
     }
     this.view.updateImage(this.model.getImage());
-    view.resetFocus();
   }
 
 
@@ -179,6 +173,7 @@ public class ImageGuiController implements ImageGuiControlInt {
         break;
       case "mosaic-open-menu":
         view.mosaicMenu();
+        view.resetFocus();
         break;
       case "mosaic-send":
         this.mosaic();
@@ -186,6 +181,8 @@ public class ImageGuiController implements ImageGuiControlInt {
         break;
       case "run-script":
         loadScript();
+        break;
+      default:
         break;
     }
   }
@@ -212,7 +209,7 @@ public class ImageGuiController implements ImageGuiControlInt {
    */
   @Override
   public void keyPressed(KeyEvent e) {
-    if (e.getKeyCode() == KeyEvent.VK_CONTROL){
+    if (e.getKeyCode() == KeyEvent.VK_CONTROL) {
       control = true;
     }
   }
@@ -264,6 +261,8 @@ public class ImageGuiController implements ImageGuiControlInt {
           view.mosaicMenu();
           this.view.updateImage(this.model.getImage());
           view.resetFocus();
+          break;
+        default:
           break;
       }
     }

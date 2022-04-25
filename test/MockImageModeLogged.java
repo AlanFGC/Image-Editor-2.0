@@ -1,6 +1,5 @@
-import java.awt.image.BufferedImage;
-
 import images.ImageModel;
+import java.awt.image.BufferedImage;
 
 /**
  * Mock Image model for testing.
@@ -93,6 +92,7 @@ public class MockImageModeLogged implements ImageModel {
    */
   @Override
   public BufferedImage getImage() {
+    log.append("-getImage");
     return null;
   }
 }

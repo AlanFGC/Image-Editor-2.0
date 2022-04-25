@@ -1,8 +1,11 @@
 package imageview;
 
-import java.awt.*;
-
-import javax.swing.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 /**
  * This is a simple interface that launches a pop-up message window.
@@ -10,13 +13,15 @@ import javax.swing.*;
 public class MessagePopUp extends JFrame {
   //Fields
   JButton okButton;
-  JLabel  message;
+  JLabel message;
   ImageViewGuiInt gui;
 
   /**
-   * Constructor for a pop-up window
+   * Create a popup window.
+   * @param gui current gui
+   * @param caption caption for the current window.
    */
-  MessagePopUp(ImageGui gui, String caption){
+  MessagePopUp(ImageGui gui, String caption) {
     super(caption);
     this.gui = gui;
 
@@ -43,14 +48,17 @@ public class MessagePopUp extends JFrame {
     message.setPreferredSize(new Dimension(800, 200));
 
 
-
     // add to window
     add(message);
     add(okButton);
     setVisible(false);
   }
 
-  public void displayMessage(String msg){
+  /**
+   * Displays a message on this window.
+   * @param msg a message
+   */
+  public void displayMessage(String msg) {
     okButton.requestFocus();
     this.message.setText(msg);
     setVisible(true);

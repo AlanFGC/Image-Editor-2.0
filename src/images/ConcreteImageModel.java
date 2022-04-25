@@ -516,7 +516,7 @@ public class ConcreteImageModel implements ImageModel {
    */
   @Override
   public BufferedImage getImage() {
-    if (this.image.length == 0){
+    if (this.image.length == 0) {
       return null;
     }
     return convertImage(this.image);

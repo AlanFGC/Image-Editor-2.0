@@ -12,7 +12,7 @@ import script.ImageView;
  * Test cases for the Image controller, this uses mocks to test
  * different features.
  */
-public class ImageControllerTest {
+public class TextControllerTest {
   private String instructions;
 
   /**
@@ -43,7 +43,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("quit");
@@ -70,7 +70,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg quit");
@@ -99,7 +99,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg save image.jpg quit");
@@ -128,7 +128,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg gray quit");
@@ -157,7 +157,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg blur quit");
@@ -186,7 +186,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg sharp quit");
@@ -215,7 +215,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg sepia quit");
@@ -244,7 +244,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg dither quit");
@@ -273,7 +273,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg mosaic\n1000 quit");
@@ -304,7 +304,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("load image.jpg gray mosaic 9213 save NEW.jpg quit");
@@ -338,7 +338,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModeLogged(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("ijaodjwqihj1qj39123 quit");
@@ -365,7 +365,7 @@ public class ImageControllerTest {
     ImageModel model;
     model = new MockImageModelErrors(modelLog);
     StringBuilder viewLog = new StringBuilder();
-    ImageView view = new MockImageView(viewLog);
+    ImageView view = new MockImageViewText(viewLog);
     //INPUTS
     Readable input;
     input = new StringReader("mosaic -8 quit");

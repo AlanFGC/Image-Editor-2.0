@@ -3,7 +3,7 @@ import script.ImageView;
 /**
  * Mock Image view implementation for testing.
  */
-public class MockImageView implements ImageView {
+public class MockImageViewText implements ImageView {
   private StringBuilder log;
 
   /**
@@ -11,7 +11,7 @@ public class MockImageView implements ImageView {
    *
    * @param log a log to append inputs to.
    */
-  MockImageView(StringBuilder log) {
+  MockImageViewText(StringBuilder log) {
     this.log = log;
   }
 

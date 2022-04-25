@@ -1,10 +1,11 @@
 import images.ImageModel;
 import java.awt.image.BufferedImage;
 
+
 /**
- * Mock Image model for testing. Throws exceptions for testing.
+ * Mock Image model for testing.
  */
-public class MockImageModelErrors implements ImageModel {
+public class MockModelGui implements ImageModel {
   private StringBuilder log;
 
   /**
@@ -12,7 +13,7 @@ public class MockImageModelErrors implements ImageModel {
    *
    * @param log a log to append inputs to.
    */
-  MockImageModelErrors(StringBuilder log) {
+  MockModelGui(StringBuilder log) {
     this.log = log;
   }
 
@@ -56,9 +57,8 @@ public class MockImageModelErrors implements ImageModel {
    * Mock method.
    */
   @Override
-  public void applyGrayscale() throws IllegalStateException {
+  public void applyGrayscale() {
     log.append("-grayscale");
-    throw new IllegalStateException("ERROR");
 
   }
 
@@ -82,9 +82,8 @@ public class MockImageModelErrors implements ImageModel {
    * Mock method.
    */
   @Override
-  public void applyMosaic(int seeds) throws IllegalArgumentException {
+  public void applyMosaic(int seeds) {
     log.append("-mosaic-" + String.format("%d", seeds));
-    throw new IllegalArgumentException("ERROR");
   }
 
   /**
@@ -94,6 +93,7 @@ public class MockImageModelErrors implements ImageModel {
    */
   @Override
   public BufferedImage getImage() {
+    log.append("-getImage");
     return null;
   }
 }

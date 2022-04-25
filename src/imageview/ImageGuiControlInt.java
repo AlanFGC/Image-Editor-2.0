@@ -12,7 +12,7 @@ public interface ImageGuiControlInt extends ActionListener, KeyListener {
   /**
    * Starts the program.
    *
-   * @param view current view to be used in the application.
+   * @param view current view to be used in the application.s
    */
   void go(ImageViewGuiInt view);
 }

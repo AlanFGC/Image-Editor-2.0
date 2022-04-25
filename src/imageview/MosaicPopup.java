@@ -1,9 +1,17 @@
 package imageview;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -19,6 +27,12 @@ public class MosaicPopup extends JFrame {
   private JButton cancel;
   private ImageGui gui;
 
+  /**
+   * Creates a window.
+   * @param gui current gui.
+   * @param caption window caption
+   * @param listener actionListener Object
+   */
   MosaicPopup(ImageGui gui, String caption, ActionListener listener) {
     super(caption);
     this.listener = listener;
@@ -82,16 +96,26 @@ public class MosaicPopup extends JFrame {
     setVisible(false);
   }
 
+  /**
+   * Opens a popup window.
+   */
   public void openPopup() {
     spinner.requestFocus();
     setVisible(true);
   }
 
+  /**
+   * Sets the current value of seeds.
+   */
   private void setValue() {
     this.seeds = (int) spinner.getValue();
     setVisible(false);
   }
 
+  /**
+   * Returns current mosaic value.
+   * @return number of seeds
+   */
   public int getValue() {
     return this.seeds;
   }
