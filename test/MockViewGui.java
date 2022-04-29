@@ -1,4 +1,3 @@
-import imageview.ImageGuiControlInt;
 import imageview.ImageViewGuiInt;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
@@ -36,6 +35,22 @@ public class MockViewGui implements ImageViewGuiInt {
   @Override
   public void setController(ActionListener actListener, KeyListener keyListener) {
     log.append("-setup");
+  }
+
+  /**
+   * Tells the controller to crop the image.
+   */
+  @Override
+  public void cropImage() {
+
+  }
+
+  /**
+   * Clears current window from any graphics.
+   */
+  @Override
+  public void clearCanvas() {
+
   }
 
   /**

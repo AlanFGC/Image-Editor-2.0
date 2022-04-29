@@ -64,4 +64,13 @@ public interface ImageModel {
    */
   public BufferedImage getImage();
 
+  /**
+   * Crops current image.
+   *
+   * @param x      x coordinate
+   * @param y      y coordinate
+   * @param width  total width
+   * @param height total height
+   */
+  void cropImage(int x, int y, int width, int height) throws IllegalArgumentException;
 }

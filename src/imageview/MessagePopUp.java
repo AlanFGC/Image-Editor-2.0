@@ -12,9 +12,9 @@ import javax.swing.SwingConstants;
  */
 public class MessagePopUp extends JFrame {
   //Fields
-  JButton okButton;
-  JLabel message;
-  ImageViewGuiInt gui;
+  protected JButton okButton;
+  protected JLabel message;
+  protected ImageViewGuiInt gui;
 
   /**
    * Create a popup window.

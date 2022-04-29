@@ -96,4 +96,17 @@ public class MockModelGui implements ImageModel {
     log.append("-getImage");
     return null;
   }
+
+  /**
+   * Crops current image.
+   * @param x      starting point in the x-axis
+   * @param y      starting point in the y-axis
+   * @param width  width of the final image.
+   * @param height height of the final image.
+   * @throws IllegalArgumentException if the image is larger than the designated area.
+   */
+  @Override
+  public void cropImage(int x, int y, int width, int height) throws IllegalArgumentException {
+
+  }
 }

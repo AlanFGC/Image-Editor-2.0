@@ -15,10 +15,10 @@ public class Startup {
   public static void main(String[] args) {
     ImageViewGuiInt view;
     ImageModel model;
-    ImageGuiControlInt controller;
+    Features controller;
     model = new ConcreteImageModel();
-    view = new ImageGui();
     controller = new ImageGuiController(model);
+    view = new ImageGui(controller);
     controller.go(view);
   }
 }

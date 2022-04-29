@@ -96,4 +96,16 @@ public class MockImageModelErrors implements ImageModel {
   public BufferedImage getImage() {
     return null;
   }
+
+  /**
+   * @param x
+   * @param y
+   * @param width
+   * @param height
+   * @throws IllegalArgumentException
+   */
+  @Override
+  public void cropImage(int x, int y, int width, int height) throws IllegalArgumentException {
+
+  }
 }

@@ -70,4 +70,14 @@ public interface ImageViewGuiInt {
    * @param keyListener KeyListener Object.
    */
   void setController(ActionListener actListener, KeyListener keyListener);
+
+  /**
+   * Tells the controller to crop the image.
+   */
+  void cropImage();
+
+  /**
+   * Clears current window from any graphics.
+   */
+  void clearCanvas();
 }

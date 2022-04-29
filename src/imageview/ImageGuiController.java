@@ -3,6 +3,7 @@ package imageview;
 import images.ImageModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,11 +14,12 @@ import script.ImageTextView;
  * This is a controller that interacts with the image model and
  * a graphical user interface.
  */
-public class ImageGuiController implements ImageGuiControlInt {
+public class ImageGuiController implements Features {
   //Fields
   private ImageModel model;
   private ImageViewGuiInt view;
   private boolean control;
+  private boolean imageLoaded;
 
 
   /**
@@ -28,6 +30,7 @@ public class ImageGuiController implements ImageGuiControlInt {
   public ImageGuiController(ImageModel model) {
     this.model = model;
     this.view = null;
+    imageLoaded = false;
   }
 
   /**
@@ -51,6 +54,7 @@ public class ImageGuiController implements ImageGuiControlInt {
     if (path != null) {
       try {
         model.loadImage(path);
+        imageLoaded = true;
       } catch (IllegalArgumentException e) {
         this.view.displayMessage("Did not open any document, wrong path or document type");
         return;
@@ -265,6 +269,31 @@ public class ImageGuiController implements ImageGuiControlInt {
         default:
           break;
       }
+    }
+  }
+
+  /**
+   * Getter method for the current image.
+   * @return an image
+   */
+  @Override
+  public BufferedImage getImage(){
+    return this.model.getImage();
+  }
+
+  /**
+   * Crops current image.
+   *
+   * @param x      x coordinate
+   * @param y      y coordinate
+   * @param width  total width
+   * @param height total height
+   */
+  @Override
+  public void cropImage(int x, int y, int width, int height) {
+    if (imageLoaded){
+      model.cropImage(x, y, width, height);
+      view.updateImage(this.model.getImage());
     }
   }
 }

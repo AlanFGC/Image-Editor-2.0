@@ -1,7 +1,7 @@
 import static org.junit.Assert.assertEquals;
 
 import images.ImageModel;
-import imageview.ImageGuiControlInt;
+import imageview.Features;
 import imageview.ImageGuiController;
 import imageview.ImageViewGuiInt;
 import java.awt.event.ActionEvent;
@@ -15,7 +15,7 @@ public class GuiControllerTest {
 
   StringBuilder modelLog;
   StringBuilder viewLog;
-  ImageGuiControlInt controller;
+  Features controller;
   ImageViewGuiInt view;
   ImageModel model;
 

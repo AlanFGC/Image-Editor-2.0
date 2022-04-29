@@ -522,6 +522,55 @@ public class ConcreteImageModel implements ImageModel {
     return convertImage(this.image);
   }
 
+
+  /**
+   * Crops current image.
+   *
+   * @param x      starting point in the x-axis
+   * @param y      starting point in the y-axis
+   * @param width  width of the final image.
+   * @param height height of the final image.
+   * @throws IllegalArgumentException if the image is larger than the designated area.
+   */
+  @Override
+  public void cropImage(int x, int y, int width, int height) throws IllegalArgumentException {
+    if (x + width > this.width || y + height > this.height || y + height < 1 || x + width < 1) {
+      throw new IllegalArgumentException("invalid arguments for a new crop image");
+    } else if (height < 1 || width < 1) {
+      throw new IllegalArgumentException("Invalid height or width");
+    } else if (this.image.length < 1) {
+      // no image
+      return;
+    }
+
+    int[][][] newImage;
+    newImage = new int[height][width][3];
+
+    int cropHeight;
+    cropHeight = height + y;
+    int cropWidth;
+    cropWidth = width + x;
+
+    int i;
+    int j;
+    i = 0;
+    j = 0;
+    for (int r = y; r < cropHeight; r++) {
+      for (int c = x; c < cropWidth; c++) {
+        newImage[i][j][0] = this.image[r][c][0];
+        newImage[i][j][1] = this.image[r][c][1];
+        newImage[i][j][2] = this.image[r][c][2];
+        j++;
+      }
+      i++;
+      j=0;
+    }
+
+    this.width = width;
+    this.height = height;
+    this.image = newImage;
+  }
+
   /*
   helper function that calculates the closest distance between two points;
    */

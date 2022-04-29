@@ -1,13 +1,13 @@
 package imageview;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -28,6 +28,8 @@ import javax.swing.JScrollPane;
  */
 public class ImageGui extends JFrame implements ImageViewGuiInt {
 
+  //controller
+  Features controller;
   //default Font
   public Font defaultFont;
   public Font buttonFont;
@@ -38,6 +40,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
   private JMenuItem loadTop;
   private JMenuItem saveTop;
   private JMenuItem runScript;
+  private JMenuItem cropImage;
   private JMenuItem exitTop;
   // Image area
   private JLabel imageLabel;
@@ -51,20 +54,25 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
   private JButton mosaic;
   private MosaicPopup mosaicPopup;
   private MessagePopUp messagePopUp;
+  private CropPreview preview;
 
+  // crop image
+  private Point selectStart;
+  private Point selectEnd;
+  private boolean croppingImage;
 
   /**
    * Creates the ui and all of its components.
    */
-  public ImageGui() {
+  public ImageGui(Features controller) {
     super("Image Editor");
-
+    this.controller = controller;
     //Set listener
+    croppingImage = false;
     actListener = null;
     keyListener = null;
     //set File chooser
     fileChooser = new JFileChooser(System.getProperty("user.dir"));
-
     // Fonts
     defaultFont = new Font("sans-serif", Font.PLAIN, 28);
     buttonFont = new Font("sans-serif", Font.PLAIN, 20);
@@ -109,8 +117,24 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     fileMenu.add(runScript);
     fileMenu.add(exitTop);
 
+
+
+    // crop menu
+    JMenu cropMenu;
+    cropMenu = new JMenu("Crop");
+    cropMenu.setPreferredSize(new Dimension(80, 70));
+    cropMenu.setFont(defaultFont);
+    cropMenu.setVisible(true);
+    cropImage = new JMenuItem("Crop Image");
+    cropImage.setActionCommand("crop-image");
+    cropImage.setFont(defaultFont);
+    cropMenu.add(cropImage);
+
+
     // ADD ITEMS TO MENU BAR;
     bar.add(fileMenu);
+    bar.add(cropMenu);
+
 
     //create image pane
     ImageIcon tempImage;
@@ -161,6 +185,8 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     mosaic.setFont(buttonFont);
     mosaic.setActionCommand("mosaic-open-menu");
     mosaicPopup = null;
+    //preview window
+    preview = new CropPreview(this);
 
     //ADD BUTTONS TO Sidebar
     sideBar.add(blur);
@@ -210,6 +236,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     fileChooser.setDialogTitle("Load a new image");
     result = fileChooser.showOpenDialog(this);
     if (result == fileChooser.APPROVE_OPTION) {
+      clearCanvas();
       return fileChooser.getSelectedFile().toString();
     }
     return null;
@@ -257,6 +284,7 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
       ImageIcon icon;
       icon = new ImageIcon(image);
       this.imageLabel.setIcon(icon);
+      pack();
     }
   }
 
@@ -299,6 +327,11 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     saveTop.addActionListener(actListener);
     runScript.addActionListener(actListener);
     exitTop.addActionListener(actListener);
+    cropImage.addActionListener(ev -> {
+      croppingImage = true;
+      displayMessage("please select an area to crop");
+    });
+
     blur.addActionListener(actListener);
     sharpen.addActionListener(actListener);
     grayscale.addActionListener(actListener);
@@ -307,5 +340,80 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     mosaic.addActionListener(actListener);
     //Key Strokes
     this.addKeyListener(keyListener);
+    //mouse
+    imageLabel.addMouseListener(new MouseListener() {
+      private Point start;
+      private Point end;
+
+
+      @Override
+      public void mouseClicked(MouseEvent e) {
+          start = null;
+          end = null;
+          imageLabel.repaint();
+      }
+
+      @Override
+      public void mousePressed(MouseEvent e) {
+        start = new Point(e.getX(), e.getY());
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        end = new Point(e.getX(), e.getY());
+        if (end != null && start != null && croppingImage){
+          Graphics rect;
+          selectStart = start;
+          selectEnd = end;
+          rect = imageLabel.getGraphics();
+          rect.setColor(new Color(250, 0, 0));
+          rect.drawRect(start.x, start.y,  Math.abs(end.x - start.x), Math.abs(end.y - start.x));
+          System.out.println(String.format("X: %d, Y: %d W: %d H: %d", start.x, start.y,  Math.abs(end.x - start.x), Math.abs(end.y - start.x)));
+          imageLabel.paintComponents(rect);
+          croppingImage = false;
+          cropMenu();
+        }
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
+      }
+    });
+  }
+
+  public void cropMenu(){
+    BufferedImage current  = controller.getImage();
+    if (current == null){
+      clearCanvas();
+      return;
+    }
+    try{
+      preview.show(current.getSubimage(selectStart.x, selectStart.y
+              ,Math.abs(selectEnd.x - selectStart.x), Math.abs(selectEnd.y - selectStart.x)));
+    }catch (RasterFormatException e){
+      clearCanvas();
+      displayMessage("Invalid area or too small");
+    }
+  }
+
+  /**
+   * Crops current image.
+   */
+  @Override
+  public void cropImage() {
+    controller.cropImage(selectStart.x, selectStart.y, Math.abs(selectEnd.x - selectStart.x),
+            Math.abs(selectEnd.y - selectStart.x));
+    pack();
+  }
+
+  @Override
+  public void clearCanvas() {
+    imageLabel.repaint();
   }
 }
