@@ -12,9 +12,6 @@ public class CropPreview extends JFrame{
   private JButton cancelButton;
   private JButton acceptButton;
 
-
-
-
   CropPreview(ImageViewGuiInt gui){
     super("Preview");
     this.setVisible(false);
@@ -48,7 +45,7 @@ public class CropPreview extends JFrame{
     buttons.add(prompt, BorderLayout.PAGE_START);
     buttons.add(cancelButton, BorderLayout.LINE_START);
     buttons.add(acceptButton, BorderLayout.LINE_END);
-    buttons.setBorder(new EmptyBorder(0, 30, 40, 30));
+    buttons.setBorder(new EmptyBorder(0, 60, 40, 60));
 
     // preview
     imagePreview = new JLabel();

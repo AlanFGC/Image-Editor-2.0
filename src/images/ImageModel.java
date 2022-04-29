@@ -73,4 +73,10 @@ public interface ImageModel {
    * @param height total height
    */
   void cropImage(int x, int y, int width, int height) throws IllegalArgumentException;
+
+  /**
+   * Applies sobel edge detection algorithm to the current image.
+   */
+  void applySobel();
+
 }

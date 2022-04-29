@@ -8,17 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
+import javax.swing.*;
 
 /**
  * This is the graphical user interface view for the Image Editor.
@@ -116,7 +106,6 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     fileMenu.add(saveTop);
     fileMenu.add(runScript);
     fileMenu.add(exitTop);
-
 
 
     // crop menu
@@ -283,7 +272,9 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     if (image != null) {
       ImageIcon icon;
       icon = new ImageIcon(image);
-      this.imageLabel.setIcon(icon);
+      imageLabel.setIcon(icon);
+      imageLabel.setVerticalAlignment(SwingConstants.TOP);
+      imageLabel.setHorizontalAlignment(SwingConstants.LEFT);
       pack();
     }
   }
@@ -348,9 +339,9 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
 
       @Override
       public void mouseClicked(MouseEvent e) {
-          start = null;
-          end = null;
-          imageLabel.repaint();
+        start = null;
+        end = null;
+        imageLabel.repaint();
       }
 
       @Override
@@ -361,14 +352,14 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
       @Override
       public void mouseReleased(MouseEvent e) {
         end = new Point(e.getX(), e.getY());
-        if (end != null && start != null && croppingImage){
+        if (end != null && start != null && croppingImage) {
           Graphics rect;
           selectStart = start;
           selectEnd = end;
           rect = imageLabel.getGraphics();
           rect.setColor(new Color(250, 0, 0));
-          rect.drawRect(start.x, start.y,  Math.abs(end.x - start.x), Math.abs(end.y - start.x));
-          System.out.println(String.format("X: %d, Y: %d W: %d H: %d", start.x, start.y,  Math.abs(end.x - start.x), Math.abs(end.y - start.x)));
+          rect.drawRect(start.x, start.y, Math.abs(end.x - start.x), Math.abs(end.y - start.x));
+          System.out.println(String.format("X: %d, Y: %d W: %d H: %d", start.x, start.y, Math.abs(end.x - start.x), Math.abs(end.y - start.x)));
           imageLabel.paintComponents(rect);
           croppingImage = false;
           cropMenu();
@@ -387,16 +378,16 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     });
   }
 
-  public void cropMenu(){
-    BufferedImage current  = controller.getImage();
-    if (current == null){
+  public void cropMenu() {
+    BufferedImage current = controller.getImage();
+    if (current == null) {
       clearCanvas();
       return;
     }
-    try{
+    try {
       preview.show(current.getSubimage(selectStart.x, selectStart.y
-              ,Math.abs(selectEnd.x - selectStart.x), Math.abs(selectEnd.y - selectStart.x)));
-    }catch (RasterFormatException e){
+              , Math.abs(selectEnd.x - selectStart.x), Math.abs(selectEnd.y - selectStart.x)));
+    } catch (RasterFormatException e) {
       clearCanvas();
       displayMessage("Invalid area or too small");
     }

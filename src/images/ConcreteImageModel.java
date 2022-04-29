@@ -173,6 +173,7 @@ public class ConcreteImageModel implements ImageModel {
   /**
    * This is a helper function that applies a 2D matrix into
    * the current image's desired pixel.
+   * This operation is formally called a convolution.
    *
    * @param kernel 2d matrix of any size as long as all columns have the same
    *               length.
@@ -535,11 +536,10 @@ public class ConcreteImageModel implements ImageModel {
   @Override
   public void cropImage(int x, int y, int width, int height) throws IllegalArgumentException {
     if (x + width > this.width || y + height > this.height || y + height < 1 || x + width < 1) {
-      throw new IllegalArgumentException("invalid arguments for a new crop image");
+      throw new IllegalArgumentException("invalid arguments for a new cropped image");
     } else if (height < 1 || width < 1) {
       throw new IllegalArgumentException("Invalid height or width");
     } else if (this.image.length < 1) {
-      // no image
       return;
     }
 
@@ -569,6 +569,51 @@ public class ConcreteImageModel implements ImageModel {
     this.width = width;
     this.height = height;
     this.image = newImage;
+  }
+
+  /**
+   * Applies sobel edge detection algorithm to the current image.
+   */
+  @Override
+  public void applySobel() {
+    if (this.image.length < 1){
+      return;
+    }
+
+    // create new images:
+    int[][][] imageX;
+    imageX = this.image;
+
+    int[][][] imageY;
+    imageY = this.image;
+
+    // get two different images;
+    int[][] kernelGx;
+    kernelGx = new int[3][3];
+    kernelGx[0][0] = 1;
+    kernelGx[0][1] = 0;
+    kernelGx[0][2] = -1;
+    kernelGx[1][0] = 2;
+    kernelGx[1][1] = 0;
+    kernelGx[1][2] = -2;
+    kernelGx[2][0] = 1;
+    kernelGx[2][1] = 0;
+    kernelGx[2][2] = -1;
+
+    int[][] kernelGy;
+    kernelGy = new int[3][3];
+    kernelGy[0][0] = 1;
+    kernelGy[0][1] = 2;
+    kernelGy[0][2] = 1;
+    kernelGy[1][0] = 0;
+    kernelGy[1][1] = 0;
+    kernelGy[1][2] = 0;
+    kernelGy[2][0] = -1;
+    kernelGy[2][1] = -2;
+    kernelGy[2][2] = -1;
+
+
+
   }
 
   /*
