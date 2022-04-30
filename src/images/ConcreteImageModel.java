@@ -213,10 +213,6 @@ public class ConcreteImageModel implements ImageModel {
     int offsetX;
     offsetX = coorX - centerX;
 
-    //sum
-    int rowLen;
-    rowLen = kernel.length;
-    int colLen;
 
     double sumR;
     sumR = 0;
@@ -563,7 +559,7 @@ public class ConcreteImageModel implements ImageModel {
         j++;
       }
       i++;
-      j=0;
+      j = 0;
     }
 
     this.width = width;
@@ -571,21 +567,32 @@ public class ConcreteImageModel implements ImageModel {
     this.image = newImage;
   }
 
+
+  /*
+  helper function that calculates the closest distance between two points;
+   */
+  private int calculateDistance(int p1, int p2, int q1, int q2) {
+    int distance;
+    distance = (int) Math.sqrt(Math.pow((q1 - p1), 2) + Math.pow((q2 - p2), 2));
+    return distance;
+  }
+
   /**
    * Applies sobel edge detection algorithm to the current image.
    */
   @Override
   public void applySobel() {
-    if (this.image.length < 1){
+    if (this.image.length < 1) {
       return;
     }
 
     // create new images:
     int[][][] imageX;
-    imageX = this.image;
+    imageX = new int[height][width][3];
 
     int[][][] imageY;
-    imageY = this.image;
+    imageY = new int[height][width][3];
+
 
     // get two different images;
     int[][] kernelGx;
@@ -602,26 +609,153 @@ public class ConcreteImageModel implements ImageModel {
 
     int[][] kernelGy;
     kernelGy = new int[3][3];
-    kernelGy[0][0] = 1;
-    kernelGy[0][1] = 2;
-    kernelGy[0][2] = 1;
+    kernelGy[0][0] = -1;
+    kernelGy[0][1] = -2;
+    kernelGy[0][2] = -1;
     kernelGy[1][0] = 0;
     kernelGy[1][1] = 0;
     kernelGy[1][2] = 0;
-    kernelGy[2][0] = -1;
-    kernelGy[2][1] = -2;
-    kernelGy[2][2] = -1;
+    kernelGy[2][0] = 1;
+    kernelGy[2][1] = 2;
+    kernelGy[2][2] = 1;
+
+
+    int[] resultX;
+    int[] resultY;
+
+    for (int r = 0; r < this.height; r++) {
+      for (int c = 0; c < this.width; c++) {
+        resultX = kernelToPixel(kernelGx, r, c, imageX);
+        imageX[r][c][0] = resultX[0];
+        imageX[r][c][1] = resultX[1];
+        imageX[r][c][2] = resultX[2];
+        resultY = kernelToPixel(kernelGy, r, c, imageY);
+        imageY[r][c][0] = resultY[0];
+        imageY[r][c][1] = resultY[1];
+        imageY[r][c][2] = resultY[2];
+      }
+    }
 
 
 
+    // final calculation
+    for (int r = 0; r < this.height; r++) {
+      for (int c = 0; c < this.width; c++) {
+        image[r][c][0] = (int) Math.sqrt( Math.pow(imageX[r][c][0], 2)
+                + Math.pow(imageY[r][c][0], 2) );
+        image[r][c][1] = (int) Math.sqrt( Math.pow(imageX[r][c][1], 2)
+                + Math.pow(imageY[r][c][1], 2) );
+        image[r][c][2] = (int) Math.sqrt( Math.pow(imageX[r][c][2], 2)
+                + Math.pow(imageY[r][c][2], 2) );
+      }
+    }
+
+    normalizeImage(this.image);
+    this.applyGrayscale();
   }
 
-  /*
-  helper function that calculates the closest distance between two points;
-   */
-  private int calculateDistance(int p1, int p2, int q1, int q2) {
-    int distance;
-    distance = (int) Math.sqrt(Math.pow((q1 - p1), 2) + Math.pow((q2 - p2), 2));
-    return distance;
+  private void normalizeImage(int[][][] image){
+    normalizeColor(image, 0);
+    normalizeColor(image, 1);
+    normalizeColor(image, 2);
   }
+
+  private void normalizeColor(int[][][] image, int color) {
+    if (image.length < 1) {
+      return;
+    } else if (color < 0 || color > 2) {
+      throw new IllegalArgumentException("Color integer is incorrect");
+    }
+    int min;
+    int max;
+    min = 999999999;
+    max = -99999999;
+
+    for (int r = 0; r < image.length; r++) {
+      for (int c = 0; c < image[0].length; c++) {
+        if (image[r][c][color] < min) {
+          min = image[r][c][color];
+        }
+        if (image[r][c][color] > max) {
+          max = image[r][c][color];
+        }
+      }
+    }
+
+    double result;
+    for (int r = 0; r < image.length; r++) {
+      for (int c = 0; c < image[0].length; c++) {
+        result = ((image[r][c][color] - min) * 255) / (max - min);
+        image[r][c][color] = (int) result;
+      }
+    }
+  }
+
+
+  private int[] kernelToPixel(int[][] kernel, int coorY, int coorX, int[][][] newImage) throws
+          IllegalArgumentException {
+    //check out of bounds
+    if (coorX < 0 || coorY < 0 || coorY > newImage.length || coorX > newImage[0].length) {
+      throw new IllegalArgumentException("Column or Row out of bounds");
+    }
+
+    // kernel center
+    int centerY;
+    centerY = kernel.length / 2;
+    int centerX;
+    centerX = kernel[0].length / 2;
+
+    if (centerX != centerY) {
+      throw new IllegalArgumentException("Kernel dimensions are incorrect");
+    }
+
+
+    //results
+    int[] rgb;
+    rgb = new int[3];
+    rgb[0] = 0;
+    rgb[1] = 0;
+    rgb[2] = 0;
+
+    // current image location
+    int offsetY;
+    offsetY = coorY - centerY;
+    int offsetX;
+    offsetX = coorX - centerX;
+
+
+    double sumR;
+    sumR = 0;
+    double sumG;
+    sumG = 0;
+    double sumB;
+    sumB = 0;
+
+    //offset
+    int currentX;
+    int currentY;
+
+    for (int row = 0; row < kernel.length; row++) {
+      for (int col = 0; col < kernel[row].length; col++) {
+        currentX = offsetX + col;
+        currentY = offsetY + row;
+        if (currentY >= newImage.length || currentX >= newImage[0].length || currentX < 0 || currentY < 0) {
+          continue;
+        } else {
+          sumR += image[currentY][currentX][0] * kernel[col][row];
+          sumG += image[currentY][currentX][1] * kernel[col][row];
+          sumB += image[currentY][currentX][2] * kernel[col][row];
+        }
+      }
+    }
+
+
+
+    rgb[0] = (int) sumR;
+    rgb[1] = (int) sumG;
+    rgb[2] = (int) sumB;
+    return rgb;
+  }
+
+
 }

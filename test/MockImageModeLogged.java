@@ -109,4 +109,12 @@ public class MockImageModeLogged implements ImageModel {
   public void cropImage(int x, int y, int width, int height) throws IllegalArgumentException {
 
   }
+
+  /**
+   * Applies sobel edge detection algorithm to the current image.
+   */
+  @Override
+  public void applySobel() {
+
+  }
 }

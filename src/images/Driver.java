@@ -12,8 +12,18 @@ public class Driver {
    */
   public static void main(String[] args) {
 
-    String filename = "res/squirrel";
+    String filename = "res/city";
+    ImageModel model = new ConcreteImageModel();
+    model.loadImage(filename + ".jpg");
+    model.applySobel();
+    model.saveImage(filename + "-sobel.jpg");
 
+
+    model.loadImage(filename + ".jpg");
+    model.applyBlur();
+    model.saveImage(filename + "-blur.jpg");
+
+    /**
     ImageModel model = new ConcreteImageModel();
 
     model.loadImage(filename + ".jpg");
@@ -56,7 +66,7 @@ public class Driver {
     model.loadImage(filename + ".jpg");
     model.applyMosaic(1000);
     model.saveImage(filename + "-mosaic-1000.jpg");
-
+    **/
 
   }
 }
