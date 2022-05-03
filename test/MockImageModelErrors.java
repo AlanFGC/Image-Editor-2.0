@@ -116,4 +116,12 @@ public class MockImageModelErrors implements ImageModel {
   public void applySobel() {
 
   }
+
+  /**
+   * Applies equalization.
+   */
+  @Override
+  public void applyEqualization() {
+
+  }
 }

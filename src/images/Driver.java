@@ -14,14 +14,18 @@ public class Driver {
 
     String filename = "res/city";
     ImageModel model = new ConcreteImageModel();
+    // sobel test
     model.loadImage(filename + ".jpg");
     model.applySobel();
     model.saveImage(filename + "-sobel.jpg");
-
+    // contrast
+    model.loadImage(filename + ".jpg");
+    model.applyEqualization();
+    model.saveImage(filename + "-contrast.jpg");
 
     model.loadImage(filename + ".jpg");
-    model.applyBlur();
-    model.saveImage(filename + "-blur.jpg");
+    model.applySharpen();
+    model.saveImage(filename + "-sharpen.jpg");
 
     /**
     ImageModel model = new ConcreteImageModel();

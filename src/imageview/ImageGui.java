@@ -42,8 +42,13 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
   private JButton sepia;
   private JButton dither;
   private JButton mosaic;
+  private JButton sobel;
+  private JButton equalize;
+
+  //mosaic
   private MosaicPopup mosaicPopup;
   private MessagePopUp messagePopUp;
+  // Crop preview
   private CropPreview preview;
 
   // crop image
@@ -174,6 +179,18 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     mosaic.setFont(buttonFont);
     mosaic.setActionCommand("mosaic-open-menu");
     mosaicPopup = null;
+    // edge panel
+    sobel = new JButton("Sobel");
+    sobel.setPreferredSize(buttonSize);
+    sobel.setFont(buttonFont);
+    sobel.setActionCommand("sobel-image");
+
+    // equalize panel
+    equalize = new JButton("Equalize B&W");
+    equalize.setPreferredSize(buttonSize);
+    equalize.setFont(buttonFont);
+    equalize.setActionCommand("equalize-image");
+
     //preview window
     preview = new CropPreview(this);
 
@@ -184,6 +201,8 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     sideBar.add(sepia);
     sideBar.add(dither);
     sideBar.add(mosaic);
+    sideBar.add(sobel);
+    sideBar.add(equalize);
 
     //Add all components to frame
     this.setJMenuBar(bar);
@@ -329,6 +348,8 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     sepia.addActionListener(actListener);
     dither.addActionListener(actListener);
     mosaic.addActionListener(actListener);
+    sobel.addActionListener(actListener);
+    equalize.addActionListener(actListener);
     //Key Strokes
     this.addKeyListener(keyListener);
     //mouse
@@ -359,7 +380,6 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
           rect = imageLabel.getGraphics();
           rect.setColor(new Color(250, 0, 0));
           rect.drawRect(start.x, start.y, Math.abs(end.x - start.x), Math.abs(end.y - start.x));
-          System.out.println(String.format("X: %d, Y: %d W: %d H: %d", start.x, start.y, Math.abs(end.x - start.x), Math.abs(end.y - start.x)));
           imageLabel.paintComponents(rect);
           croppingImage = false;
           cropMenu();
@@ -378,7 +398,10 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     });
   }
 
-  public void cropMenu() {
+  /**
+   * Starts the crop menu.
+   */
+  private void cropMenu() {
     BufferedImage current = controller.getImage();
     if (current == null) {
       clearCanvas();
@@ -393,6 +416,16 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     }
   }
 
+
+  /**
+   * Starts the process for image cropping.
+   */
+  @Override
+  public void cropImagePopUp() {
+    croppingImage = true;
+    displayMessage("please select an area to crop");
+  }
+
   /**
    * Crops current image.
    */
@@ -403,7 +436,9 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
     pack();
   }
 
-  @Override
+  /**
+   * Clears current canvas.
+   */
   public void clearCanvas() {
     imageLabel.repaint();
   }

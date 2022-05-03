@@ -79,4 +79,8 @@ public interface ImageModel {
    */
   void applySobel();
 
+  /**
+   * Applies equalization.
+   */
+  void applyEqualization();
 }

@@ -72,6 +72,11 @@ public interface ImageViewGuiInt {
   void setController(ActionListener actListener, KeyListener keyListener);
 
   /**
+   * Starts the process for image cropping.
+   */
+  void cropImagePopUp();
+
+  /**
    * Tells the controller to crop the image.
    */
   void cropImage();

@@ -117,4 +117,12 @@ public class MockModelGui implements ImageModel {
   public void applySobel() {
 
   }
+
+  /**
+   * Applies equalization.
+   */
+  @Override
+  public void applyEqualization() {
+
+  }
 }

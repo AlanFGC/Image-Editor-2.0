@@ -38,6 +38,14 @@ public class MockViewGui implements ImageViewGuiInt {
   }
 
   /**
+   * Starts the process for image cropping.
+   */
+  @Override
+  public void cropImagePopUp() {
+
+  }
+
+  /**
    * Tells the controller to crop the image.
    */
   @Override

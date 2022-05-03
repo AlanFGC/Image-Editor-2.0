@@ -6,10 +6,13 @@ import static images.ImageUtilities.getWidth;
 import static images.ImageUtilities.readImage;
 import static images.ImageUtilities.writeImage;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is the model implementation of a system that
@@ -625,11 +628,11 @@ public class ConcreteImageModel implements ImageModel {
 
     for (int r = 0; r < this.height; r++) {
       for (int c = 0; c < this.width; c++) {
-        resultX = kernelToPixel(kernelGx, r, c, imageX);
+        resultX = kernelToPixelNewImage(kernelGx, r, c, imageX);
         imageX[r][c][0] = resultX[0];
         imageX[r][c][1] = resultX[1];
         imageX[r][c][2] = resultX[2];
-        resultY = kernelToPixel(kernelGy, r, c, imageY);
+        resultY = kernelToPixelNewImage(kernelGy, r, c, imageY);
         imageY[r][c][0] = resultY[0];
         imageY[r][c][1] = resultY[1];
         imageY[r][c][2] = resultY[2];
@@ -637,16 +640,15 @@ public class ConcreteImageModel implements ImageModel {
     }
 
 
-
     // final calculation
     for (int r = 0; r < this.height; r++) {
       for (int c = 0; c < this.width; c++) {
-        image[r][c][0] = (int) Math.sqrt( Math.pow(imageX[r][c][0], 2)
-                + Math.pow(imageY[r][c][0], 2) );
-        image[r][c][1] = (int) Math.sqrt( Math.pow(imageX[r][c][1], 2)
-                + Math.pow(imageY[r][c][1], 2) );
-        image[r][c][2] = (int) Math.sqrt( Math.pow(imageX[r][c][2], 2)
-                + Math.pow(imageY[r][c][2], 2) );
+        image[r][c][0] = (int) Math.sqrt(Math.pow(imageX[r][c][0], 2)
+                + Math.pow(imageY[r][c][0], 2));
+        image[r][c][1] = (int) Math.sqrt(Math.pow(imageX[r][c][1], 2)
+                + Math.pow(imageY[r][c][1], 2));
+        image[r][c][2] = (int) Math.sqrt(Math.pow(imageX[r][c][2], 2)
+                + Math.pow(imageY[r][c][2], 2));
       }
     }
 
@@ -654,7 +656,7 @@ public class ConcreteImageModel implements ImageModel {
     this.applyGrayscale();
   }
 
-  private void normalizeImage(int[][][] image){
+  private void normalizeImage(int[][][] image) {
     normalizeColor(image, 0);
     normalizeColor(image, 1);
     normalizeColor(image, 2);
@@ -692,7 +694,7 @@ public class ConcreteImageModel implements ImageModel {
   }
 
 
-  private int[] kernelToPixel(int[][] kernel, int coorY, int coorX, int[][][] newImage) throws
+  private int[] kernelToPixelNewImage(int[][] kernel, int coorY, int coorX, int[][][] newImage) throws
           IllegalArgumentException {
     //check out of bounds
     if (coorX < 0 || coorY < 0 || coorY > newImage.length || coorX > newImage[0].length) {
@@ -750,12 +752,91 @@ public class ConcreteImageModel implements ImageModel {
     }
 
 
-
     rgb[0] = (int) sumR;
     rgb[1] = (int) sumG;
     rgb[2] = (int) sumB;
     return rgb;
   }
 
+
+  /**
+   * This function applies grayscale histogram equalization to the current image.
+   */
+  @Override
+  public void applyEqualization() {
+    if (this.image.length < 1) {
+      return;
+    }
+    Map<Integer, Integer> histogram;
+    histogram = new HashMap<>();
+
+    //calculate histogram.
+    for (int r = 0; r < this.height; r++) {
+      for (int c = 0; c < this.width; c++) {
+        // default value is one, if present adds 1.
+        histogram.merge(this.image[r][c][0], 1, Integer::sum);
+      }
+    }
+    //put all 0 values into 1.
+    if (histogram.containsKey(0)) {
+      if (histogram.containsKey(1)) {
+        histogram.put(1, histogram.get(1) + histogram.get(0));
+      } else {
+        histogram.put(1, histogram.get(0));
+      }
+      histogram.remove(0);
+    }
+
+    // distribution has format [value][cdf]
+    int min;
+    min = 999999999;
+    int[][] distribution;
+    distribution = new int[histogram.size()][3];
+    int count;
+    count = 0;
+    for (int key : histogram.keySet()) {
+      if (histogram.get(key) < min) {
+        min = histogram.get(key);
+      }
+      int sum = 0;
+      for (int sumKey : histogram.keySet()) {
+        if (sumKey <= key) {
+          sum += histogram.get(sumKey);
+        }
+      }
+      distribution[count][0] = key;
+      distribution[count][1] = sum;
+      count++;
+    }
+
+
+    int totalPixels;
+    totalPixels = this.width * this.height;
+    //idealized distribution
+    for (int i = 0; i < distribution.length; i++) {
+      int cdf;
+      cdf = distribution[i][1];
+      double result;
+      result = (cdf - min);
+      result = result / (totalPixels - min);
+      result = result * 255;
+      histogram.put(distribution[i][0], (int)result);
+    }
+    //modify original image
+    for (int r = 0; r < this.height; r++) {
+      for (int c = 0; c < this.width; c++) {
+        if (image[r][c][0] == 0) {
+          image[r][c][0] = 1;
+        }
+        int finalValue;
+        finalValue = histogram.get(image[r][c][0]);
+        image[r][c][0] = finalValue;
+        image[r][c][1] = finalValue;
+        image[r][c][2] = finalValue;
+      }
+    }
+
+
+  }
 
 }

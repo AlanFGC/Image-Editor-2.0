@@ -183,6 +183,14 @@ public class ImageGuiController implements Features {
         this.mosaic();
         view.resetFocus();
         break;
+      case "sobel-image":
+        model.applySobel();
+        this.view.updateImage(this.model.getImage());
+        break;
+      case "equalize-image":
+        model.applyEqualization();
+        this.view.updateImage(this.model.getImage());
+        break;
       case "run-script":
         loadScript();
         break;
@@ -266,6 +274,16 @@ public class ImageGuiController implements Features {
           this.view.updateImage(this.model.getImage());
           view.resetFocus();
           break;
+        case KeyEvent.VK_O:
+          model.applySobel();
+          this.view.updateImage(this.model.getImage());
+          view.resetFocus();
+        case KeyEvent.VK_Q:
+          model.applyEqualization();
+          this.view.updateImage(this.model.getImage());
+          view.resetFocus();
+        case KeyEvent.VK_C:
+          view.cropImagePopUp();
         default:
           break;
       }
