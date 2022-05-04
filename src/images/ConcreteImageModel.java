@@ -6,7 +6,6 @@ import static images.ImageUtilities.getWidth;
 import static images.ImageUtilities.readImage;
 import static images.ImageUtilities.writeImage;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -105,6 +104,14 @@ public class ConcreteImageModel implements ImageModel {
     for (int row = 0; row < this.height; row++) {
       for (int col = 0; col < this.width; col++) {
         rgb = kernelToPixel(blur, row, col);
+        rgb[0] = rgb[0] > 255 ? rgb[0] = 255 : rgb[0];
+        rgb[1] = rgb[1] > 255 ? rgb[1] = 255 : rgb[1];
+        rgb[2] = rgb[2] > 255 ? rgb[2] = 255 : rgb[2];
+
+        rgb[0] = rgb[0] < 0 ? rgb[0] = 0 : rgb[0];
+        rgb[1] = rgb[1] < 0 ? rgb[1] = 0 : rgb[1];
+        rgb[2] = rgb[2] < 0 ? rgb[2] = 0 : rgb[2];
+
         newImage[row][col][0] = rgb[0];
         newImage[row][col][1] = rgb[1];
         newImage[row][col][2] = rgb[2];
@@ -165,6 +172,13 @@ public class ConcreteImageModel implements ImageModel {
     for (int row = 0; row < this.height; row++) {
       for (int col = 0; col < this.width; col++) {
         rgb = kernelToPixel(sharpen, row, col);
+        rgb[0] = rgb[0] > 255 ? rgb[0] = 255 : rgb[0];
+        rgb[1] = rgb[1] > 255 ? rgb[1] = 255 : rgb[1];
+        rgb[2] = rgb[2] > 255 ? rgb[2] = 255 : rgb[2];
+
+        rgb[0] = rgb[0] < 0 ? rgb[0] = 0 : rgb[0];
+        rgb[1] = rgb[1] < 0 ? rgb[1] = 0 : rgb[1];
+        rgb[2] = rgb[2] < 0 ? rgb[2] = 0 : rgb[2];
         newImage[row][col][0] = rgb[0];
         newImage[row][col][1] = rgb[1];
         newImage[row][col][2] = rgb[2];
@@ -241,15 +255,6 @@ public class ConcreteImageModel implements ImageModel {
         }
       }
     }
-
-    sumR = sumR > 255 ? sumR = 255 : sumR;
-    sumG = sumG > 255 ? sumG = 255 : sumG;
-    sumB = sumB > 255 ? sumB = 255 : sumB;
-
-    sumR = sumR < 0 ? sumR = 0 : sumR;
-    sumG = sumG < 0 ? sumG = 0 : sumG;
-    sumB = sumB < 0 ? sumB = 0 : sumB;
-
 
     rgb[0] = (int) sumR;
     rgb[1] = (int) sumG;
@@ -598,8 +603,8 @@ public class ConcreteImageModel implements ImageModel {
 
 
     // get two different images;
-    int[][] kernelGx;
-    kernelGx = new int[3][3];
+    double[][] kernelGx;
+    kernelGx = new double[3][3];
     kernelGx[0][0] = 1;
     kernelGx[0][1] = 0;
     kernelGx[0][2] = -1;
@@ -610,8 +615,8 @@ public class ConcreteImageModel implements ImageModel {
     kernelGx[2][1] = 0;
     kernelGx[2][2] = -1;
 
-    int[][] kernelGy;
-    kernelGy = new int[3][3];
+    double[][] kernelGy;
+    kernelGy = new double[3][3];
     kernelGy[0][0] = -1;
     kernelGy[0][1] = -2;
     kernelGy[0][2] = -1;
@@ -628,11 +633,11 @@ public class ConcreteImageModel implements ImageModel {
 
     for (int r = 0; r < this.height; r++) {
       for (int c = 0; c < this.width; c++) {
-        resultX = kernelToPixelNewImage(kernelGx, r, c, imageX);
+        resultX = kernelToPixel(kernelGx, r, c);
         imageX[r][c][0] = resultX[0];
         imageX[r][c][1] = resultX[1];
         imageX[r][c][2] = resultX[2];
-        resultY = kernelToPixelNewImage(kernelGy, r, c, imageY);
+        resultY = kernelToPixel(kernelGy, r, c);
         imageY[r][c][0] = resultY[0];
         imageY[r][c][1] = resultY[1];
         imageY[r][c][2] = resultY[2];
@@ -691,71 +696,6 @@ public class ConcreteImageModel implements ImageModel {
         image[r][c][color] = (int) result;
       }
     }
-  }
-
-
-  private int[] kernelToPixelNewImage(int[][] kernel, int coorY, int coorX, int[][][] newImage) throws
-          IllegalArgumentException {
-    //check out of bounds
-    if (coorX < 0 || coorY < 0 || coorY > newImage.length || coorX > newImage[0].length) {
-      throw new IllegalArgumentException("Column or Row out of bounds");
-    }
-
-    // kernel center
-    int centerY;
-    centerY = kernel.length / 2;
-    int centerX;
-    centerX = kernel[0].length / 2;
-
-    if (centerX != centerY) {
-      throw new IllegalArgumentException("Kernel dimensions are incorrect");
-    }
-
-
-    //results
-    int[] rgb;
-    rgb = new int[3];
-    rgb[0] = 0;
-    rgb[1] = 0;
-    rgb[2] = 0;
-
-    // current image location
-    int offsetY;
-    offsetY = coorY - centerY;
-    int offsetX;
-    offsetX = coorX - centerX;
-
-
-    double sumR;
-    sumR = 0;
-    double sumG;
-    sumG = 0;
-    double sumB;
-    sumB = 0;
-
-    //offset
-    int currentX;
-    int currentY;
-
-    for (int row = 0; row < kernel.length; row++) {
-      for (int col = 0; col < kernel[row].length; col++) {
-        currentX = offsetX + col;
-        currentY = offsetY + row;
-        if (currentY >= newImage.length || currentX >= newImage[0].length || currentX < 0 || currentY < 0) {
-          continue;
-        } else {
-          sumR += image[currentY][currentX][0] * kernel[col][row];
-          sumG += image[currentY][currentX][1] * kernel[col][row];
-          sumB += image[currentY][currentX][2] * kernel[col][row];
-        }
-      }
-    }
-
-
-    rgb[0] = (int) sumR;
-    rgb[1] = (int) sumG;
-    rgb[2] = (int) sumB;
-    return rgb;
   }
 
 
@@ -820,7 +760,7 @@ public class ConcreteImageModel implements ImageModel {
       result = (cdf - min);
       result = result / (totalPixels - min);
       result = result * 255;
-      histogram.put(distribution[i][0], (int)result);
+      histogram.put(distribution[i][0], (int) result);
     }
     //modify original image
     for (int r = 0; r < this.height; r++) {
@@ -835,8 +775,6 @@ public class ConcreteImageModel implements ImageModel {
         image[r][c][2] = finalValue;
       }
     }
-
-
   }
 
 }

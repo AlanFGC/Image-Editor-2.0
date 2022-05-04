@@ -99,6 +99,7 @@ public class MockModelGui implements ImageModel {
 
   /**
    * Crops current image.
+   *
    * @param x      starting point in the x-axis
    * @param y      starting point in the y-axis
    * @param width  width of the final image.
@@ -107,7 +108,7 @@ public class MockModelGui implements ImageModel {
    */
   @Override
   public void cropImage(int x, int y, int width, int height) throws IllegalArgumentException {
-
+    log.append(x + "-" + y + "-" + width + "-" + height);
   }
 
   /**
@@ -115,7 +116,7 @@ public class MockModelGui implements ImageModel {
    */
   @Override
   public void applySobel() {
-
+    log.append("sobel-filter");
   }
 
   /**
@@ -123,6 +124,6 @@ public class MockModelGui implements ImageModel {
    */
   @Override
   public void applyEqualization() {
-
+    log.append("equalization-filter");
   }
 }

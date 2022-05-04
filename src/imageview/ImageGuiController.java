@@ -19,7 +19,6 @@ public class ImageGuiController implements Features {
   private ImageModel model;
   private ImageViewGuiInt view;
   private boolean control;
-  private boolean imageLoaded;
 
 
   /**
@@ -30,7 +29,6 @@ public class ImageGuiController implements Features {
   public ImageGuiController(ImageModel model) {
     this.model = model;
     this.view = null;
-    imageLoaded = false;
   }
 
   /**
@@ -54,7 +52,6 @@ public class ImageGuiController implements Features {
     if (path != null) {
       try {
         model.loadImage(path);
-        imageLoaded = true;
       } catch (IllegalArgumentException e) {
         this.view.displayMessage("Did not open any document, wrong path or document type");
         return;
@@ -186,10 +183,12 @@ public class ImageGuiController implements Features {
       case "sobel-image":
         model.applySobel();
         this.view.updateImage(this.model.getImage());
+        view.resetFocus();
         break;
       case "equalize-image":
         model.applyEqualization();
         this.view.updateImage(this.model.getImage());
+        view.resetFocus();
         break;
       case "run-script":
         loadScript();
@@ -278,12 +277,15 @@ public class ImageGuiController implements Features {
           model.applySobel();
           this.view.updateImage(this.model.getImage());
           view.resetFocus();
+          break;
         case KeyEvent.VK_Q:
           model.applyEqualization();
           this.view.updateImage(this.model.getImage());
           view.resetFocus();
+          break;
         case KeyEvent.VK_C:
           view.cropImagePopUp();
+          break;
         default:
           break;
       }
@@ -292,10 +294,11 @@ public class ImageGuiController implements Features {
 
   /**
    * Getter method for the current image.
+   *
    * @return an image
    */
   @Override
-  public BufferedImage getImage(){
+  public BufferedImage getImage() {
     return this.model.getImage();
   }
 
@@ -309,9 +312,7 @@ public class ImageGuiController implements Features {
    */
   @Override
   public void cropImage(int x, int y, int width, int height) {
-    if (imageLoaded){
-      model.cropImage(x, y, width, height);
-      view.updateImage(this.model.getImage());
-    }
+    model.cropImage(x, y, width, height);
+    view.updateImage(this.model.getImage());
   }
 }

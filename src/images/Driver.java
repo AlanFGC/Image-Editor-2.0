@@ -12,22 +12,9 @@ public class Driver {
    */
   public static void main(String[] args) {
 
+    // examples
     String filename = "res/city";
-    ImageModel model = new ConcreteImageModel();
-    // sobel test
-    model.loadImage(filename + ".jpg");
-    model.applySobel();
-    model.saveImage(filename + "-sobel.jpg");
-    // contrast
-    model.loadImage(filename + ".jpg");
-    model.applyEqualization();
-    model.saveImage(filename + "-contrast.jpg");
 
-    model.loadImage(filename + ".jpg");
-    model.applySharpen();
-    model.saveImage(filename + "-sharpen.jpg");
-
-    /**
     ImageModel model = new ConcreteImageModel();
 
     model.loadImage(filename + ".jpg");
@@ -70,7 +57,14 @@ public class Driver {
     model.loadImage(filename + ".jpg");
     model.applyMosaic(1000);
     model.saveImage(filename + "-mosaic-1000.jpg");
-    **/
+
+    model.loadImage(filename + ".jpg");
+    model.applySobel();
+    model.saveImage(filename + "-sobel.jpg");
+    // contrast
+    model.loadImage(filename + ".jpg");
+    model.applyEqualization();
+    model.saveImage(filename + "-contrast.jpg");
 
   }
 }

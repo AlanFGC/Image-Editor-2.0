@@ -1,18 +1,33 @@
 package imageview;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
-
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class CropPreview extends JFrame{
+/**
+ * This is just a standard preview window when cropping.
+ */
+public class CropPreview extends JFrame {
 
   private JLabel imagePreview;
   private JButton cancelButton;
   private JButton acceptButton;
 
-  CropPreview(ImageViewGuiInt gui){
+  /**
+   * Creates a preview.
+   *
+   * @param gui a gui View.
+   */
+  CropPreview(ImageViewGuiInt gui) {
     super("Preview");
     this.setVisible(false);
     //prompt
@@ -57,8 +72,12 @@ public class CropPreview extends JFrame{
     pack();
   }
 
-
-  public void show(BufferedImage preview){
+  /**
+   * Shows the current preview image.
+   *
+   * @param preview a buffered image
+   */
+  public void show(BufferedImage preview) {
     Icon image;
     image = new ImageIcon(preview);
     imagePreview.setIcon(image);

@@ -71,6 +71,7 @@ public interface ImageModel {
    * @param y      y coordinate
    * @param width  total width
    * @param height total height
+   * @throws IllegalArgumentException if the image is larger than the designated area.
    */
   void cropImage(int x, int y, int width, int height) throws IllegalArgumentException;
 

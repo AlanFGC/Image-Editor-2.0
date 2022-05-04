@@ -8,7 +8,7 @@ Up to this point this program has this many filters:
 1. grayscale filter.<br/>
 Basic grayscale filter.
 2. sepia filter.<br/>
-Sepia Yellowish and black filter.
+Sepia yellowish and black filter.
 3. blur filter.<br/>
 Basic blur filter.
 4. sharpening filter.<br/>
@@ -28,18 +28,28 @@ Creates simple colored patterns.
 
 This program makes a copy in memory
 and applies the filters to that copy.
-
-##Limitations
+---
+## Limitations
 This program cannot undo changes made to an image, it 
 is also destructive, meaning that the copy in memory
 will keep changing according to the filters applied.
 A layering system has not been implemented.
-
-##How to use?
+---
+## How to use? (Model only)
 Compile the program like any other java project.
 Then use the __load__ command to load an image, enter its filename
 and use any filter you wish to try. Before typing the __quit__ command remember
 to save to a new file.
+---
+## How to use (Gui)
+Run the application.jar file left in res directory.
+Load and Image and apply any filter or use any tool found in the top menu or on the side menus.
+Remember to always save your file before exiting the application.
+You can also recompile this program using an IDE or doing it manually.
+I found this guide that might be useful:<br>
+https://jenkov.com/tutorials/java/java-project-overview-compilation-and-execution.html <br>
+To run any jar file one must have java installed on their computer and execute the jar file through the command
+line, each operating system has its own commands.
 ---
 ## Keyboard ShortCuts (GUI)
 
@@ -57,7 +67,7 @@ to save to a new file.
 'CTRL + Q' : apply histogram equalizer filter 
 
 ### Tools
-'CTRL + C' : Crop image (Opens menu)
+'CTRL + C' : Crop image (Let's you start cropping)
 
 ---
 ## Text controller example:
@@ -67,6 +77,16 @@ The **input.txt** script found in /res works the same way by using __load__ then
 of the file. Then we can apply any filter in the list from the examples shown, 
 if you type __options__ you can get the whole list of commands.
 To save we simply type __save__ then the name of our new file.
+
+All the commands can be displayed inside the program by typing '__options__' in the cli.
+
+---
+## Image examples:
+Inside the res file there are 3 different images.
+city.jpg and squirrel.jpg showcase almost every filter, however black and white histogram equalization
+is difficult to showcase, that's why I added a desaturated almost black and white image called tiger.jpg
+just to specifically show how the equalizer works correctly. 
+
 ---
 ## Credits
 This project is part of class CS-5004 course at Northeastern University, taught by professor Maria Jump.

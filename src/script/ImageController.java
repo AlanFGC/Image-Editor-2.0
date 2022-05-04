@@ -48,6 +48,8 @@ public class ImageController {
     inst += "blur - to apply blur filter\n";
     inst += "dither - to apply dither filter\n";
     inst += "mosaic - to apply mosaic filter\n";
+    inst += "sobel - to apply sobel filter\n";
+    inst += "equalization - to apply equalization filter\n";
     String cmd;
     cmd = "";
     String[] error;
@@ -100,6 +102,16 @@ public class ImageController {
           case "dither":
             view.displayMsg("Applying dithering filter...");
             model.applyDither();
+            view.displayMsg("Filter successfully applied.");
+            break;
+          case "sobel":
+            view.displayMsg("Applying sobel filter...");
+            model.applySobel();
+            view.displayMsg("Filter successfully applied.");
+            break;
+          case "equalization":
+            view.displayMsg("Applying equalization filter...");
+            model.applyEqualization();
             view.displayMsg("Filter successfully applied.");
             break;
           case "mosaic":

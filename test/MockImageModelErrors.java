@@ -98,11 +98,12 @@ public class MockImageModelErrors implements ImageModel {
   }
 
   /**
-   * @param x
-   * @param y
-   * @param width
-   * @param height
-   * @throws IllegalArgumentException
+   * Crops current image.
+   *
+   * @param x      x coordinate
+   * @param y      y coordinate
+   * @param width  total width
+   * @param height total height
    */
   @Override
   public void cropImage(int x, int y, int width, int height) throws IllegalArgumentException {

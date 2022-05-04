@@ -1,14 +1,29 @@
 package imageview;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.RasterFormatException;
-
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
 /**
  * This is the graphical user interface view for the Image Editor.
@@ -18,11 +33,13 @@ import javax.swing.*;
  */
 public class ImageGui extends JFrame implements ImageViewGuiInt {
 
-  //controller
-  Features controller;
+
   //default Font
-  public Font defaultFont;
   public Font buttonFont;
+  public Font defaultFont;
+
+  //controller
+  private Features controller;
   //Event Listener
   private ActionListener actListener;
   private KeyListener keyListener;
@@ -55,6 +72,9 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
   private Point selectStart;
   private Point selectEnd;
   private boolean croppingImage;
+
+
+
 
   /**
    * Creates the ui and all of its components.
@@ -408,8 +428,8 @@ public class ImageGui extends JFrame implements ImageViewGuiInt {
       return;
     }
     try {
-      preview.show(current.getSubimage(selectStart.x, selectStart.y
-              , Math.abs(selectEnd.x - selectStart.x), Math.abs(selectEnd.y - selectStart.x)));
+      preview.show(current.getSubimage(selectStart.x, selectStart.y,
+              Math.abs(selectEnd.x - selectStart.x), Math.abs(selectEnd.y - selectStart.x)));
     } catch (RasterFormatException e) {
       clearCanvas();
       displayMessage("Invalid area or too small");

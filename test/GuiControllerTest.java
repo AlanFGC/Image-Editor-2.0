@@ -194,4 +194,48 @@ public class GuiControllerTest {
     expectedLog = "-dither-getImage";
     assertEquals(expectedLog, modelLog.toString());
   }
+
+
+  /**
+   * Crop test.
+   */
+  @Test
+  public void cropTest() {
+    controller.cropImage(213, 321, 856875, 1231);
+    String expectedLog;
+    expectedLog = "-setup-updateImage";
+    assertEquals(expectedLog, viewLog.toString());
+    expectedLog = "213-321-856875-1231-getImage";
+    assertEquals(expectedLog, modelLog.toString());
+  }
+
+  /**
+   * Sobel test.
+   */
+  @Test
+  public void sobelTest() {
+    ActionEvent action;
+    action = new ActionEvent(new Object(), 1, "sobel-image");
+    controller.actionPerformed(action);
+    String expectedLog;
+    expectedLog = "-setup-updateImage-resetFocus";
+    assertEquals(expectedLog, viewLog.toString());
+    expectedLog = "sobel-filter-getImage";
+    assertEquals(expectedLog, modelLog.toString());
+  }
+
+  /**
+   * dither test.
+   */
+  @Test
+  public void equalizeTest() {
+    ActionEvent action;
+    action = new ActionEvent(new Object(), 1, "equalize-image");
+    controller.actionPerformed(action);
+    String expectedLog;
+    expectedLog = "-setup-updateImage-resetFocus";
+    assertEquals(expectedLog, viewLog.toString());
+    expectedLog = "equalization-filter-getImage";
+    assertEquals(expectedLog, modelLog.toString());
+  }
 }

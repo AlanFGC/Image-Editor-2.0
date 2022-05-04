@@ -107,7 +107,7 @@ public class MockImageModeLogged implements ImageModel {
    */
   @Override
   public void cropImage(int x, int y, int width, int height) throws IllegalArgumentException {
-
+    log.append(x + "-" + y + "-" + width + "-" + height);
   }
 
   /**
@@ -115,7 +115,7 @@ public class MockImageModeLogged implements ImageModel {
    */
   @Override
   public void applySobel() {
-
+    log.append("sobel-filter");
   }
 
   /**
@@ -123,6 +123,6 @@ public class MockImageModeLogged implements ImageModel {
    */
   @Override
   public void applyEqualization() {
-
+    log.append("equalization-filter");
   }
 }
